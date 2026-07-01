@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.5도를 지켜라! — 환경&수학 융합수업 2차시</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--pr:#1565c0;--pr2:#0d47a1;--ac:#00897b;--rd:#c62828;--or:#e65100;--gn:#2e7d32;--bg:#EFF6FF;--wh:#fff;--tx:#1F2937;--mu:#4B5563}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#EFF6FF;color:var(--tx);min-height:100vh;font-size:15px}
+.scr{display:none;max-width:740px;margin:0 auto;padding:20px 16px}
+.scr.on{display:block}
+h1{font-size:1.5rem;font-weight:800;color:var(--pr);margin-bottom:6px}
+h2{font-size:1.2rem;font-weight:700;color:var(--pr);margin-bottom:10px}
+h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+p{line-height:1.7;margin-bottom:8px}
+.card{background:var(--wh);border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.hdr{background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border-radius:12px;padding:18px;margin-bottom:16px;text-align:center}
+.hdr h1,.hdr h2{color:#fff}
+.hdr p{color:rgba(255,255,255,.85);margin:4px 0 0}
+.btn{display:inline-block;padding:11px 22px;border-radius:8px;border:none;cursor:pointer;font-size:.95rem;font-weight:700;font-family:inherit;transition:all .2s}
+.btn-pr{background:var(--pr);color:#fff}.btn-pr:hover{background:var(--pr2)}
+.btn-ac{background:var(--ac);color:#fff}.btn-ac:hover{opacity:.9}
+.btn-ol{background:#fff;color:var(--pr);border:2px solid var(--pr)}.btn-ol:hover{background:var(--bg)}
+.btn-full{width:100%;display:block;text-align:center;margin-top:12px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+input[type=text],input[type=number],textarea,select{width:100%;padding:10px 13px;border:2px solid #ccc;border-radius:8px;font-size:.95rem;font-family:inherit;transition:border-color .2s;margin-top:5px}
+input:focus,textarea:focus{outline:none;border-color:var(--pr)}
+textarea{min-height:75px;resize:vertical}
+.fg{margin-bottom:13px}
+label{font-weight:600;font-size:.88rem;color:var(--mu)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+/* quiz opts */
+.qopt{display:block;width:100%;text-align:left;padding:11px 14px;margin:5px 0;border-radius:8px;border:2px solid #e0e0e0;background:#fff;cursor:pointer;font-size:.92rem;font-family:inherit;transition:all .2s}
+.qopt:hover:not(:disabled){border-color:var(--pr);background:var(--bg)}
+.qopt.ok{border-color:var(--gn)!important;background:#e8f5e9!important;color:var(--gn)!important}
+.qopt.no{border-color:var(--rd)!important;background:#ffebee!important;color:var(--rd)!important;text-decoration:line-through}
+/* feedback */
+.fb{padding:11px 14px;border-radius:8px;margin-top:9px;font-size:.88rem;line-height:1.65;display:none}
+.fb.ok{background:#e8f5e9;border-left:4px solid var(--gn);color:var(--gn);display:block}
+.fb.no{background:#ffebee;border-left:4px solid var(--rd);color:var(--rd);display:block}
+.fb.info{background:#e3f2fd;border-left:4px solid var(--pr);color:var(--pr);display:block}
+/* hint */
+.hint-btn{background:none;border:1px dashed var(--mu);color:var(--mu);padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;margin-top:8px;font-family:inherit}
+.hint-box{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:11px 14px;margin-top:8px;font-size:.87rem;line-height:1.8;display:none}
+/* stage nav — 1차시 탭 스타일 */
+.snav{display:flex;background:#fff;border-radius:10px;overflow:hidden;margin-bottom:16px;border:1px solid #E5E7EB}
+.sdot{flex:1;text-align:center;padding:10px 4px 8px;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s;border-bottom:3px solid transparent;line-height:1.4;color:#9CA3AF}
+.sdot.done{color:#16a34a;border-bottom-color:#16a34a;cursor:pointer}
+.sdot.done:hover{background:#f0fdf4}
+.sdot.cur{color:var(--pr);border-bottom-color:var(--pr)}
+.sdot.lock{color:#9e9e9e;cursor:default}
+/* info grid */
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.icell{background:#EFF6FF;border-radius:8px;padding:12px;text-align:center}
+.icell .big{font-size:1.7rem;font-weight:800;color:var(--pr)}
+.icell .lbl{font-size:.75rem;color:var(--mu);margin-top:3px}
+/* math box */
+.mbox{background:#f3e5f5;border:1px solid #ce93d8;border-radius:8px;padding:13px 15px;margin:10px 0;font-size:.93rem;line-height:2}
+.mbox .step{color:var(--pr);font-weight:700}
+/* country cards */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ccard{border:2px solid #e0e0e0;border-radius:10px;padding:13px;cursor:pointer;transition:all .2s;text-align:center}
+.ccard:hover{border-color:var(--pr);background:var(--bg)}
+.ccard.sel{border-color:var(--pr);background:var(--bg)}
+.ccard .fl{font-size:2rem;display:block;margin-bottom:5px}
+.ccard .cn{font-weight:700;font-size:.92rem}
+.ccard .cd{font-size:.74rem;color:var(--mu);margin-top:4px;line-height:1.45}
+/* choice btns */
+.cbtn{display:block;width:100%;text-align:left;padding:13px 15px;margin:7px 0;border-radius:10px;border:2px solid #e0e0e0;background:#fff;cursor:pointer;font-size:.92rem;font-family:inherit;transition:all .2s;line-height:1.55}
+.cbtn:hover:not(:disabled){border-color:var(--pr);background:var(--bg)}
+.cbtn.sel{border-color:var(--pr);background:var(--bg)}
+.cbtn.res-ok{border-color:var(--gn);background:#e8f5e9}
+.cbtn.res-no{border-color:#ff7043;background:#fbe9e7}
+/* round header */
+.rnd-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.rnd-num{background:var(--pr);color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0}
+.nation-bar{background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border-radius:10px;padding:11px 15px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.nation-bar .fl2{font-size:1.8rem}
+.nation-bar .dt{font-size:.83rem;line-height:1.6}
+/* butterfly */
+.bfly{background:linear-gradient(135deg,#fff3e0,#fff8e1);border:2px solid #ffc107;border-radius:10px;padding:12px 15px;margin:10px 0;font-size:.88rem;line-height:1.65}
+.bfly .bt{font-weight:700;color:var(--or);margin-bottom:5px}
+/* grade */
+.grade-wrap{text-align:center;padding:24px 0}
+.gcircle{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;font-weight:900;margin:0 auto 14px;border:6px solid}
+.gS{color:#b71c1c;border-color:#b71c1c;background:#fff8f8}
+.gA{color:#e65100;border-color:#e65100;background:#fff8f0}
+.gB{color:#1565c0;border-color:#1565c0;background:#f0f4ff}
+.gC{color:var(--ac);border-color:var(--ac);background:#f0faf8}
+.gD{color:var(--mu);border-color:var(--mu);background:#f5f5f5}
+/* score breakdown */
+.sbk{background:var(--bg);border-radius:10px;padding:14px;margin:12px 0}
+.srow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ddd;font-size:.88rem}
+.srow:last-child{border:none;font-weight:800;font-size:.95rem}
+/* game link card */
+.glcard{background:linear-gradient(135deg,#1a237e,#283593);color:#fff;border-radius:12px;padding:22px;text-align:center;margin-top:18px}
+.glcard h3{color:#fff;font-size:1.1rem;margin-bottom:7px}
+.glcard p{color:rgba(255,255,255,.8);font-size:.85rem;margin-bottom:14px}
+.btn-game{background:linear-gradient(135deg,#00e5ff,#00b0ff);color:#1a237e;padding:13px 28px;border-radius:25px;border:none;font-size:.95rem;font-weight:800;cursor:pointer;display:inline-block;text-decoration:none;transition:transform .2s;font-family:inherit}
+.btn-game:hover{transform:scale(1.05)}
+.bonus-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 14px;display:inline-block;margin-bottom:14px;font-size:.85rem}
+/* slider */
+.sldr input[type=range]{width:100%;margin:7px 0;accent-color:var(--pr)}
+/* carbon items */
+.citem{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #eee;cursor:pointer}
+.citem:last-child{border:none}
+.citem input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:var(--ac)}
+.citem .iname{flex:1;font-size:.9rem}
+.citem .ival{font-size:.82rem;color:var(--ac);font-weight:700}
+/* input inline */
+.irow{display:flex;align-items:center;gap:8px;margin:8px 0;flex-wrap:wrap}
+.irow input{flex:1;min-width:70px}
+.ieq{font-size:1rem;color:var(--mu);white-space:nowrap}
+/* alert */
+.al{padding:11px 14px;border-radius:8px;margin:9px 0;font-size:.88rem;line-height:1.65}
+.al-info{background:#e3f2fd;border-left:4px solid var(--pr)}
+.al-warn{background:#fff3e0;border-left:4px solid #f57f17}
+.al-ok{background:#e8f5e9;border-left:4px solid var(--gn)}
+.al-bad{background:#ffebee;border-left:4px solid var(--rd)}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.75rem;font-weight:700;margin-left:6px}
+.tag-ok{background:#e8f5e9;color:var(--gn)}.tag-no{background:#ffebee;color:var(--rd)}.tag-neu{background:#e3f2fd;color:var(--pr)}
+.mt8{margin-top:8px}.mt14{margin-top:14px}.mt20{margin-top:20px}
+.tc{text-align:center}.mu{color:var(--mu)}.sm{font-size:.85rem}
+/* login fullscreen */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e3a5f 0%,#2563EB 100%);padding:24px}
+/* topbar */
+#topbar{display:none;position:sticky;top:0;z-index:200;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;padding:10px 16px;align-items:center;gap:12px}
+#topbar.show{display:flex}
+.topbar-badge{background:rgba(255,255,255,.22);font-size:11px;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.topbar-title{font-size:16px;font-weight:700}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+/* admin panel — 1차시 동일 */
+.admin-panel{background:#1e1b4b;color:#fff;padding:12px 20px;position:sticky;top:52px;z-index:199;display:none}
+.admin-panel.show{display:block}
+.admin-title{font-size:11px;font-weight:700;color:#a5b4fc;letter-spacing:.08em;margin-bottom:10px}
+.admin-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;align-items:center}
+.admin-label{font-size:11px;color:#a5b4fc;min-width:60px}
+.admin-btn{padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.admin-btn:hover{background:rgba(255,255,255,.2)}
+.admin-btn.active-stage{background:#4f46e5;border-color:#818cf8}
+.admin-divider{width:100%;height:1px;background:rgba(255,255,255,.1);margin:4px 0}
+.admin-q-select{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit;cursor:pointer}
+.admin-q-select option{color:#1e1b4b;background:#fff}
+#s2chart-wrap{position:relative;height:210px;margin:14px 0}
+.eq-big{font-size:1.3rem;font-weight:800;color:var(--pr);margin:8px 0;text-align:center}
+.num-summary{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.ns-item{background:#fff;border-radius:10px;padding:12px 18px;text-align:center;border:2px solid var(--bg);flex:1;min-width:120px}
+.ns-item .nv{font-size:1.5rem;font-weight:800;color:var(--pr)}
+.ns-item .nd{font-size:.75rem;color:var(--mu);margin-top:3px}
+.divider{height:1px;background:#e8e8e8;margin:14px 0}
+.radio-row{display:flex;gap:10px;margin:8px 0}
+.radio-row label{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--tx);font-size:.93rem}
+.radio-row input[type=radio]{width:16px;height:16px;accent-color:var(--pr);cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div style="background:#fff;border-radius:16px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,0.2)">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:36px;margin-bottom:10px">🌍</div>
+      <div style="font-size:20px;font-weight:700;color:#1F2937;margin-bottom:6px">1.5도를 지켜라!</div>
+      <div style="font-size:13px;color:#9CA3AF">수학 × 환경 융합 수업 · 2차시</div>
+    </div>
+    <!-- 역할 선택 -->
+    <div id="roleSelect">
+      <div style="font-size:13px;font-weight:600;color:#4B5563;text-align:center;margin-bottom:14px">역할을 선택하세요</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <button onclick="showStudentForm()" style="padding:20px 12px;border-radius:10px;border:2px solid #DBEAFE;background:#EFF6FF;font-size:15px;font-weight:700;color:var(--pr);cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--pr)'" onmouseout="this.style.borderColor='#DBEAFE'">
+          🎒<br><span style="font-size:13px;margin-top:6px;display:block">학생</span>
+        </button>
+        <button onclick="showTeacherForm()" style="padding:20px 12px;border-radius:10px;border:2px solid #e0e0ee;background:#f8f8fc;font-size:15px;font-weight:700;color:#1F2937;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='#9090b0'" onmouseout="this.style.borderColor='#e0e0ee'">
+          📋<br><span style="font-size:13px;margin-top:6px;display:block">교사</span>
+        </button>
+      </div>
+    </div>
+    <!-- 학생 폼 -->
+    <div id="studentForm" style="display:none">
+      <button onclick="backToRole()" style="background:none;border:none;color:#9CA3AF;font-size:13px;cursor:pointer;margin-bottom:16px;font-family:inherit">← 뒤로</button>
+      <div style="font-size:14px;font-weight:700;color:#1F2937;margin-bottom:16px">🎒 학생 정보 입력</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4B5563;display:block;margin-bottom:4px">학년</label>
+          <select id="loginGrade" style="width:100%;border:1.5px solid #e0e0ee;border-radius:8px;padding:9px 8px;font-size:14px;font-family:inherit;color:#1F2937">
+            <option value="">-</option>
+            <option value="1">1학년</option><option value="2">2학년</option><option value="3">3학년</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4B5563;display:block;margin-bottom:4px">반</label>
+          <select id="loginClass" style="width:100%;border:1.5px solid #e0e0ee;border-radius:8px;padding:9px 8px;font-size:14px;font-family:inherit;color:#1F2937">
+            <option value="">-</option>
+            <option value="1">1반</option><option value="2">2반</option><option value="3">3반</option><option value="4">4반</option><option value="5">5반</option><option value="6">6반</option><option value="7">7반</option><option value="8">8반</option><option value="9">9반</option><option value="10">10반</option><option value="11">11반</option><option value="12">12반</option><option value="13">13반</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4B5563;display:block;margin-bottom:4px">번호</label>
+          <input id="loginNum" type="number" min="1" max="40" placeholder="번호" style="width:100%;border:1.5px solid #e0e0ee;border-radius:8px;padding:9px 8px;font-size:14px;font-family:inherit;color:#1F2937;margin-top:0">
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:11px;font-weight:600;color:#4B5563;display:block;margin-bottom:4px">이름</label>
+        <input id="loginName" type="text" placeholder="이름을 입력하세요" style="width:100%;border:1.5px solid #e0e0ee;border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;color:#1F2937;margin-top:0" onkeydown="if(event.key==='Enter')startAsStudent()">
+      </div>
+      <div id="studentError" style="display:none;font-size:12px;color:#dc2626;margin-bottom:10px;padding:8px 12px;background:#fee2e2;border-radius:6px">모든 항목을 입력해주세요.</div>
+      <button onclick="startAsStudent()" style="width:100%;padding:12px;border-radius:8px;background:var(--pr);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">수업 시작하기 →</button>
+    </div>
+    <!-- 교사 폼 -->
+    <div id="teacherForm" style="display:none">
+      <button onclick="backToRole()" style="background:none;border:none;color:#9CA3AF;font-size:13px;cursor:pointer;margin-bottom:16px;font-family:inherit">← 뒤로</button>
+      <div style="font-size:14px;font-weight:700;color:#1F2937;margin-bottom:16px">📋 교사 로그인</div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:11px;font-weight:600;color:#4B5563;display:block;margin-bottom:4px">비밀번호</label>
+        <input id="teacherPw" type="password" placeholder="비밀번호를 입력하세요" style="width:100%;border:1.5px solid #e0e0ee;border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;color:#1F2937;margin-top:0" onkeydown="if(event.key==='Enter')startAsTeacher()">
+      </div>
+      <div id="teacherError" style="display:none;font-size:12px;color:#dc2626;margin-bottom:10px;padding:8px 12px;background:#fee2e2;border-radius:6px">비밀번호가 틀렸어요.</div>
+      <button onclick="startAsTeacher()" style="width:100%;padding:12px;border-radius:8px;background:#1e1b4b;color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">관리자 모드 입장 →</button>
+    </div>
+    <p style="text-align:center;font-size:11px;color:#bbb;margin-top:20px">※ 수업용 가상 시나리오입니다</p>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <span class="topbar-badge">수학 × 환경</span>
+  <span class="topbar-title">1.5도를 지켜라!</span>
+  <div class="topbar-right">
+    <span id="topbar-name" style="font-size:12px;opacity:.9"></span>
+    <button id="admin-toggle-btn" style="display:none;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit" onclick="toggleAdminPanel()">⚙ 관리자</button>
+    <button onclick="logout()" style="padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;font-size:11px;cursor:pointer;font-family:inherit" title="로그아웃">↩ 로그아웃</button>
+  </div>
+</div>
+
+<!-- 관리자 패널 -->
+<div class="admin-panel" id="admin-panel">
+  <div class="admin-title">⚙ 관리자 모드 — 단계 및 문제 이동</div>
+  <div class="admin-row">
+    <span class="admin-label">단계 이동</span>
+    <button class="admin-btn" onclick="adminGoStage('home')">🏠 홈</button>
+    <button class="admin-btn" onclick="adminGoStage('s1')">단계 1<br><span style="font-size:10px;opacity:.7">1.5도 의미</span></button>
+    <button class="admin-btn" onclick="adminGoStage('s2')">단계 2<br><span style="font-size:10px;opacity:.7">탄소 시계</span></button>
+    <button class="admin-btn" onclick="adminGoStage('s3')">단계 3<br><span style="font-size:10px;opacity:.7">탄소 예산</span></button>
+    <button class="admin-btn" onclick="adminGoStage('s4')">단계 4<br><span style="font-size:10px;opacity:.7">UN 협상</span></button>
+    <button class="admin-btn" onclick="adminGoStage('s5')">단계 5<br><span style="font-size:10px;opacity:.7">마무리</span></button>
+  </div>
+  <div class="admin-divider"></div>
+  <div class="admin-row">
+    <span class="admin-label">문제 이동</span>
+    <select class="admin-q-select" id="adminQSelect" onchange="adminGoQuiz(this.value)">
+      <option value="">-- 문제 선택 --</option>
+      <optgroup label="단계 1 — 1.5도의 의미">
+        <option value="s1_q1">Q1 0.5°C 차이</option>
+        <option value="s1_q2">Q2 해수면 10cm</option>
+        <option value="s1_q3">Q3 산호초 면적 계산</option>
+        <option value="s1_q4">Q4 침수 위기 인구</option>
+        <option value="s1_q5">Q5 % vs %p</option>
+      </optgroup>
+      <optgroup label="단계 2 — 탄소 시계">
+        <option value="s2_q1">Q4 함수식 유도</option>
+        <option value="s2_q2">Q5 1.5°C 돌파 시점</option>
+        <option value="s2_adv">Q6 슬라이더 심화</option>
+      </optgroup>
+      <optgroup label="단계 3 — 탄소 예산">
+        <option value="s3_q1">Q7 연립방정식</option>
+        <option value="s3_q2">Q8 인구 비례</option>
+        <option value="s3_q3">Q9 공정성 판단</option>
+      </optgroup>
+      <optgroup label="단계 4 — UN 협상">
+        <option value="s4_r0">국가 선택</option>
+        <option value="s4_r1">라운드 1: 감축 목표</option>
+        <option value="s4_r2">라운드 2: 기후기금</option>
+        <option value="s4_r3">라운드 3: 위기 대응</option>
+        <option value="s4_r4">라운드 4: 최종 선언</option>
+      </optgroup>
+      <optgroup label="단계 5 — 마무리">
+        <option value="s5">탄소발자국 &amp; 다짐</option>
+      </optgroup>
+    </select>
+  </div>
+  <div class="admin-divider"></div>
+  <div class="admin-row">
+    <span class="admin-label">기타</span>
+    <button class="admin-btn" onclick="adminReset()" style="border-color:#f87171;color:#fca5a5">🔄 전체 초기화</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="scr-home" class="scr">
+  <div class="hdr">
+    <div style="font-size:1.8rem">🌍</div>
+    <h1>1.5도를 지켜라!</h1>
+    <p id="h-welcome">환경&수학 융합수업 2차시</p>
+  </div>
+  <div class="card">
+    <div class="flex-b" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>진행 현황</h3>
+      <span id="h-score-chip" style="font-weight:800;color:var(--pr)"></span>
+    </div>
+    <div class="snav" id="h-snav"></div>
+  </div>
+  <div id="h-stages"></div>
+</div>
+
+<!-- STAGE 1 -->
+<div id="scr-s1" class="scr">
+  <div class="hdr"><h2>1단계: 1.5도의 의미</h2><p>0.5도 차이가 왜 중요할까?</p></div>
+  <div class="card">
+    <h3>📊 1.5°C vs 2°C — 무엇이 달라질까?</h3>
+    <div class="igrid">
+      <div class="icell"><div class="big">70%</div><div class="lbl">1.5°C 시 산호초 감소</div></div>
+      <div class="icell"><div class="big">99%</div><div class="lbl">2°C 시 산호초 소멸</div></div>
+      <div class="icell"><div class="big">26cm</div><div class="lbl">1.5°C 시 해수면 상승</div></div>
+      <div class="icell"><div class="big">36cm</div><div class="lbl">2°C 시 해수면 상승</div></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="card" id="s1-q1-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 1 / 5</h3><span class="tag tag-neu">6점</span>
+    </div>
+    <p>파리협정의 '1.5°C 목표'와 '2°C 목표', 두 시나리오 사이의 <strong>온도 차이</strong>는 몇 도인가요?</p>
+    <div id="s1-q1-opts">
+      <button class="qopt" onclick="s1check(1,0)">① 0.3°C</button>
+      <button class="qopt" onclick="s1check(1,1)">② 0.5°C</button>
+      <button class="qopt" onclick="s1check(1,2)">③ 1.0°C</button>
+      <button class="qopt" onclick="s1check(1,3)">④ 1.5°C</button>
+      <button class="qopt" onclick="s1check(1,4)">⑤ 2.0°C</button>
+    </div>
+    <div id="s1-q1-fb" class="fb"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="card" id="s1-q2-card" style="opacity:.4;pointer-events:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 2 / 5</h3><span class="tag tag-neu">6점</span>
+    </div>
+    <p>1.5°C와 2°C 시나리오에서 해수면 상승 높이의 <strong>차이</strong>는 약 몇 cm인가요? (IPCC 기준)</p>
+    <div id="s1-q2-opts">
+      <button class="qopt" onclick="s1check(2,0)">① 5cm</button>
+      <button class="qopt" onclick="s1check(2,1)">② 10cm</button>
+      <button class="qopt" onclick="s1check(2,2)">③ 20cm</button>
+      <button class="qopt" onclick="s1check(2,3)">④ 36cm</button>
+      <button class="qopt" onclick="s1check(2,4)">⑤ 46cm</button>
+    </div>
+    <div id="s1-q2-fb" class="fb"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="card" id="s1-q3-card" style="opacity:.4;pointer-events:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 3 / 5</h3><span class="tag tag-neu">6점</span>
+    </div>
+    <p>전 세계 산호초의 총 면적은 약 <strong>25만 km²</strong>입니다. 1.5°C 시나리오에서 산호초의 <strong>70%가 감소</strong>한다면, 살아남는 산호초의 면적은 약 얼마인가요?</p>
+    <div id="s1-q3-opts">
+      <button class="qopt" onclick="s1check(3,0)">① 0.25만 km²</button>
+      <button class="qopt" onclick="s1check(3,1)">② 7.5만 km²</button>
+      <button class="qopt" onclick="s1check(3,2)">③ 17.5만 km²</button>
+      <button class="qopt" onclick="s1check(3,3)">④ 24.75만 km²</button>
+      <button class="qopt" onclick="s1check(3,4)">⑤ 25만 km²</button>
+    </div>
+    <div id="s1-q3-fb" class="fb"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="card" id="s1-q4-card" style="opacity:.4;pointer-events:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 4 / 5</h3><span class="tag tag-neu">6점</span>
+    </div>
+    <p>1.5°C와 2°C 시나리오에서 해수면은 각각 26cm, 36cm 상승합니다.<br>이 <strong>10cm의 차이</strong>로 침수 위기에서 구해지는 인구는 약 몇 명인가요?</p>
+    <div id="s1-q4-opts">
+      <button class="qopt" onclick="s1check(4,0)">① 10만 명</button>
+      <button class="qopt" onclick="s1check(4,1)">② 100만 명</button>
+      <button class="qopt" onclick="s1check(4,2)">③ 1,000만 명</button>
+      <button class="qopt" onclick="s1check(4,3)">④ 1억 명</button>
+      <button class="qopt" onclick="s1check(4,4)">⑤ 10억 명</button>
+    </div>
+    <div id="s1-q4-fb" class="fb"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="card" id="s1-q5-card" style="opacity:.4;pointer-events:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 5 / 5</h3><span class="tag tag-neu">6점</span>
+    </div>
+    <p>산호초 소멸률이 1.5°C 시나리오의 <strong>70%</strong>에서 2°C 시나리오의 <strong>99%</strong>로 증가했습니다.<br>이 변화를 올바르게 표현한 것은?</p>
+    <div id="s1-q5-opts">
+      <button class="qopt" onclick="s1check(5,0)">① 29% 증가했다</button>
+      <button class="qopt" onclick="s1check(5,1)">② 29%p 증가했다</button>
+      <button class="qopt" onclick="s1check(5,2)">③ 41.4% 증가했다</button>
+      <button class="qopt" onclick="s1check(5,3)">④ 41.4%p 증가했다</button>
+      <button class="qopt" onclick="s1check(5,4)">⑤ 2배 증가했다</button>
+    </div>
+    <div id="s1-q5-fb" class="fb"></div>
+  </div>
+
+  <div id="s1-done-card" class="card" style="display:none;text-align:center">
+    <div style="font-size:2rem">🎉</div>
+    <h3 class="mt8">1단계 완료!</h3>
+    <p id="s1-score-msg" class="mt8"></p>
+    <button class="btn btn-pr btn-full mt14" onclick="goHome()">홈으로 돌아가기</button>
+  </div>
+</div>
+
+<!-- STAGE 2 -->
+<div id="scr-s2" class="scr">
+  <div class="hdr"><h2>2단계: 탄소 시계</h2><p>일차함수로 1.5°C 돌파 시점 예측하기</p></div>
+  <div class="card">
+    <h3>📋 현재 데이터 (2026년 기준)</h3>
+    <div class="igrid">
+      <div class="icell"><div class="big">424</div><div class="lbl">현재 CO₂ 농도 (ppm)</div></div>
+      <div class="icell"><div class="big">2.4</div><div class="lbl">매년 증가량 (ppm/년)</div></div>
+      <div class="icell"><div class="big">450</div><div class="lbl">1.5°C 돌파 기준 (ppm)</div></div>
+      <div class="icell"><div class="big">x</div><div class="lbl">2026년 이후 경과 연수</div></div>
+    </div>
+  </div>
+
+  <!-- CO2 농도 설명 -->
+  <div class="card">
+    <h3>🔍 CO₂ 농도(ppm)란?</h3>
+    <p><strong>ppm(parts per million)</strong>은 '백만분의 일'을 나타내는 단위입니다.<br>
+    CO₂ 농도 424 ppm = 공기 100만 개 분자 중 CO₂가 424개</p>
+    <div class="igrid" style="margin-top:10px">
+      <div class="icell"><div class="big" style="font-size:1.4rem">280</div><div class="lbl">산업혁명 이전 CO₂ (ppm)</div></div>
+      <div class="icell"><div class="big" style="font-size:1.4rem">424</div><div class="lbl">현재(2026년) CO₂ (ppm)</div></div>
+    </div>
+    <div class="al al-warn mt8">⚠️ CO₂ 농도가 높아질수록 온실효과가 강화되어 지구 평균 온도가 상승합니다. 과학자들은 <strong>450 ppm</strong>에 이르면 지구 온도가 약 1.5°C 상승할 것으로 예측합니다.</div>
+  </div>
+
+  <!-- Q1: 함수식 유도 -->
+  <div class="card" id="s2-q1-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 1: 함수식 세우기</h3><span class="tag tag-neu">10점</span>
+    </div>
+    <p>위 데이터를 이용하여, <strong>x년 후의 CO₂ 농도를 y</strong>라 할 때 y를 x에 대한 식으로 나타내시오.</p>
+    <div class="eq-big">y = <input type="number" id="s2-slope" style="width:70px;display:inline-block;margin:0 4px" placeholder="?"> x + <input type="number" id="s2-intercept" style="width:70px;display:inline-block;margin:0 4px" placeholder="?"></div>
+    <button class="btn btn-ol mt8" onclick="s2checkFunc()">확인</button>
+    <button class="hint-btn" onclick="toggleHint('s2-h1')">💡 힌트</button>
+    <div class="hint-box" id="s2-h1">
+      일차함수 y = ax + b에서<br>
+      • a (기울기) = 매년 변화량 = ?<br>
+      • b (y절편) = x=0일 때(2026년) 초기값 = ?
+    </div>
+    <div id="s2-q1-fb" class="fb"></div>
+  </div>
+
+  <!-- Q2: x 구하기 -->
+  <div class="card" id="s2-q2-card" style="opacity:.4;pointer-events:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 2: 1.5°C 돌파까지 몇 년?</h3><span class="tag tag-neu">10점</span>
+    </div>
+    <p>완성한 함수식을 이용하여, CO₂ 농도가 <strong>450 ppm</strong>에 도달하는 것은 <strong>몇 년 후</strong>인지 구하시오.</p>
+    <p class="mu sm mt8">※ 소수점 첫째 자리에서 반올림하시오.</p>
+    <div class="irow">
+      <span class="ieq">약</span>
+      <input type="number" id="s2-xval" style="width:90px;display:inline-block" placeholder="x = ?">
+      <span class="ieq">년 후 → 약</span>
+      <input type="number" id="s2-year" style="width:100px;display:inline-block" placeholder="연도">
+      <span class="ieq">년</span>
+    </div>
+    <button class="btn btn-ol mt8" onclick="s2checkCalc()">확인</button>
+    <button class="hint-btn" onclick="toggleHint('s2-h2')">💡 힌트</button>
+    <div class="hint-box" id="s2-h2">
+      <div class="mbox">
+        <span class="step">풀이 과정을 써봐요:</span><br>
+        450 = 2.4x + 424<br>
+        2.4x = 450 − 424 = ___<br>
+        x = ___ ÷ 2.4 = ___
+      </div>
+      2.4x = 26 → x = 26 ÷ 2.4 = ?<br>
+      소수점 첫째 자리까지 구해보세요.<br>
+      2026년 + x년 = ?년
+    </div>
+    <div id="s2-q2-fb" class="fb"></div>
+  </div>
+
+  <!-- 심화: 슬라이더 -->
+  <div class="card" id="s2-adv-card" style="opacity:.4;pointer-events:none">
+    <h3>🔬 심화 탐구: 감축하면 어떻게 될까?</h3>
+    <p class="mu sm">연간 CO₂ 증가량을 조절하여 1.5°C 돌파 시점 변화를 탐색해보세요.</p>
+    <p class="mu sm mt8">📌 참고: 현재(2026년 기준) 연간 CO₂ 증가량은 <strong>2.4 ppm</strong>입니다. 슬라이더를 왼쪽으로 옮기면 적극 감축 시나리오를 확인할 수 있습니다.</p>
+    <div class="sldr mt8">
+      <div style="display:flex;justify-content:space-between"><span class="sm">감축 노력</span><strong id="s2-rate-lbl">2.4 ppm/년</strong></div>
+      <input type="range" id="s2-slider" min="0.3" max="2.4" step="0.1" value="2.4" oninput="s2updateChart()">
+      <div style="display:flex;justify-content:space-between" class="sm mu"><span>← 적극 감축</span><span>현재 추세 →</span></div>
+    </div>
+    <div id="s2chart-wrap"><canvas id="s2-chart"></canvas></div>
+    <div class="al al-info tc">1.5°C 돌파 예상: <strong id="s2-cross-lbl">2037년 (약 11년 후)</strong></div>
+  </div>
+
+  <div id="s2-done-card" class="card" style="display:none;text-align:center">
+    <div style="font-size:2rem">⏰</div>
+    <h3 class="mt8">2단계 완료!</h3>
+    <p id="s2-score-msg" class="mt8"></p>
+    <button class="btn btn-pr btn-full mt14" onclick="goHome()">홈으로 돌아가기</button>
+  </div>
+</div>
+
+<!-- STAGE 3 -->
+<div id="scr-s3" class="scr">
+  <div class="hdr"><h2>3단계: 탄소 예산 나누기</h2><p>연립방정식으로 탄소 배분의 공정성 따져보기</p></div>
+  <div class="card">
+    <h3>📋 상황 설정</h3>
+    <p>2021년 인류에게 남은 탄소 예산은 4,000억 톤이었습니다.<br>현재(2026년) <strong>약 2,000억 톤</strong>만 남았습니다. 5년 만에 절반이 소진된 것입니다.</p>
+    <div class="al al-warn">⚠️ 현재 배출 속도로는 약 5년치밖에 남지 않았습니다.</div>
+    <p class="mt8">이 2,000억 톤을 <strong>선진국(a)</strong>과 <strong>개발도상국(b)</strong>으로 나누려고 합니다.</p>
+  </div>
+
+  <!-- Q1: 연립방정식 -->
+  <div class="card" id="s3-q1-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 1: 현재 배출 비율로 나누기</h3><span class="tag tag-neu">15점</span>
+    </div>
+    <p>현재 선진국의 탄소 배출량이 개발도상국의 2배라고 한다. 이 비율대로 잔여 탄소 예산 2,000억 톤을 분배하면 각각 얼마인지 구하시오.</p>
+    <div class="irow"><span class="ieq">선진국 a ≈</span><input type="number" id="s3-q1a" placeholder="억 톤"><span class="ieq">억 톤</span></div>
+    <div class="irow"><span class="ieq">개발도상국 b ≈</span><input type="number" id="s3-q1b" placeholder="억 톤"><span class="ieq">억 톤</span></div>
+    <button class="btn btn-ol mt8" onclick="s3checkQ1()">확인</button>
+    <button class="hint-btn" onclick="toggleHint('s3-h1')">💡 힌트</button>
+    <div class="hint-box" id="s3-h1">
+      <div class="mbox">
+        <span class="step">연립방정식 세우기:</span><br>
+        a + b = 2000 &nbsp;···①<br>
+        a = 2b &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;···②<br>
+        <span class="step">②를 ①에 대입:</span><br>
+        2b + b = 2000 → 3b = 2000 → b ≈ ___
+      </div>
+      b = 2000 ÷ 3 ≈ 667 (소수점 반올림)<br>
+      a = 2 × b ≈ ?
+    </div>
+    <div id="s3-q1-fb" class="fb"></div>
+  </div>
+
+  <!-- Q2: 인구 비례 -->
+  <div class="card" id="s3-q2-card" style="opacity:.4;pointer-events:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>문제 2: 인구 비례로 나누기</h3><span class="tag tag-neu">15점</span>
+    </div>
+    <p>선진국과 개발도상국의 인구 비율이 약 1 : 4라고 한다. 이 비율대로 잔여 탄소 예산 2,000억 톤을 분배하면 각각 얼마인지 구하시오.</p>
+    <div class="irow"><span class="ieq">선진국 a =</span><input type="number" id="s3-q2a" placeholder="억 톤"><span class="ieq">억 톤</span></div>
+    <div class="irow"><span class="ieq">개발도상국 b =</span><input type="number" id="s3-q2b" placeholder="억 톤"><span class="ieq">억 톤</span></div>
+    <button class="btn btn-ol mt8" onclick="s3checkQ2()">확인</button>
+    <button class="hint-btn" onclick="toggleHint('s3-h2')">💡 힌트</button>
+    <div class="hint-box" id="s3-h2">
+      <div class="mbox">
+        <span class="step">비례 배분:</span><br>
+        전체 2000을 (1+4) = 5로 나누면 1칸 = ___억 톤<br>
+        선진국 = 1칸 × 1 = ___<br>
+        개발도상국 = 1칸 × 4 = ___
+      </div>
+      2000 ÷ 5 = 400<br>
+      선진국(1칸): 400 × 1 = 400억 톤<br>
+      개발도상국(4칸): 400 × 4 = 1,600억 톤
+    </div>
+    <div id="s3-q2-fb" class="fb"></div>
+  </div>
+
+  <!-- 기후 정의 배경지식 카드 -->
+  <div class="card" id="s3-cj-card" style="opacity:.4;pointer-events:none">
+    <h3>🌍 기후 정의(Climate Justice)란?</h3>
+    <p class="mu sm">두 시나리오의 숫자를 계산했습니다. 공정성을 판단하기 전에 배경 지식을 살펴봅시다.</p>
+
+    <div class="al al-info mt8">
+      <strong>📜 국제법: CBDR 원칙</strong><br>
+      1992년 유엔기후변화협약(UNFCCC)은 <strong>"공통의 그러나 차별화된 책임(CBDR)"</strong> 원칙을 명문화했습니다.<br>
+      선진국이 역사적으로 더 많이 배출했으므로 <strong>더 큰 책임을 져야 한다</strong>는 국제 조약입니다.
+    </div>
+
+    <div class="igrid mt8">
+      <div class="icell"><div class="big">57%</div><div class="lbl">1850년~현재 누적 CO₂ 중 선진국 배출 비중</div></div>
+      <div class="icell"><div class="big" style="font-size:1.3rem">280→424</div><div class="lbl">산업혁명 이전→현재 CO₂ 농도(ppm)</div></div>
+    </div>
+    <p class="mu sm mt8">개발도상국이 산업화를 시작하기도 전에 대기 중 CO₂ 농도를 끌어올린 것은 주로 선진국입니다.</p>
+
+    <div class="al al-info mt8">
+      <strong>📊 IPCC 6차 보고서(AR6, 2022)</strong><br>
+      탄소 예산의 형평성 있는 배분 논의에서 <strong>1인당 평등 배분</strong> 또는 <strong>역사적 책임 반영</strong> 방식이 더 공정하다고 명시합니다.
+    </div>
+
+    <h4 class="mt8" style="margin-bottom:6px">🔍 시나리오①을 어떻게 볼 수 있을까?</h4>
+    <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+      <tr style="background:var(--bg)">
+        <th style="padding:8px;border:1px solid #ddd;text-align:left">관점</th>
+        <th style="padding:8px;border:1px solid #ddd;text-align:left">시나리오① 평가</th>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #ddd">현재 경제 현실</td>
+        <td style="padding:8px;border:1px solid #ddd">✅ 공정 — 각국이 현재 쓰는 만큼 배분</td>
+      </tr>
+      <tr style="background:#f9fafb">
+        <td style="padding:8px;border:1px solid #ddd">감축 인센티브</td>
+        <td style="padding:8px;border:1px solid #ddd">✅ 역설적으로 공정 — 이미 감축한 나라를 불이익 주지 않음</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #ddd">역사적 책임</td>
+        <td style="padding:8px;border:1px solid #ddd">❌ 불공정 — 과거 과다 배출 책임이 반영되지 않음</td>
+      </tr>
+      <tr style="background:#f9fafb">
+        <td style="padding:8px;border:1px solid #ddd">인구(1인당)</td>
+        <td style="padding:8px;border:1px solid #ddd">❌ 불공정 — 선진국 1인이 개도국 1인보다 훨씬 많이 배분받음</td>
+      </tr>
+    </table>
+    <button class="btn btn-pr btn-full mt14" onclick="s3showJudge()">공정성 판단하러 가기 →</button>
+  </div>
+
+  <!-- Q3: 공정성 판단 -->
+  <div class="card" id="s3-q3-card" style="opacity:.4;pointer-events:none">
+    <h3>비교 & 공정성 판단</h3>
+    <div id="s3-compare-table" style="margin:10px 0"></div>
+    <div class="divider"></div>
+    <p><strong>문제 1의 결과(현재 배출 비율 시나리오)는 공정한가요?</strong></p>
+    <div class="radio-row mt8">
+      <label><input type="radio" name="s3-judge" value="fair" onchange="s3judgeChange()"> 공정하다</label>
+      <label><input type="radio" name="s3-judge" value="unfair" onchange="s3judgeChange()"> 불공정하다</label>
+    </div>
+    <div class="fg mt8"><label>그렇게 판단한 이유를 써보세요 (10자 이상)</label>
+      <textarea id="s3-reason" placeholder="예: 선진국이 역사적으로 더 많이 배출했으므로..."></textarea>
+    </div>
+    <button id="s3-submit-btn" class="btn btn-pr btn-full" onclick="s3submitJudge()" disabled>판단 제출</button>
+    <div id="s3-q3-fb" class="fb"></div>
+  </div>
+
+  <div id="s3-done-card" class="card" style="display:none;text-align:center">
+    <div style="font-size:2rem">⚖️</div>
+    <h3 class="mt8">3단계 완료!</h3>
+    <p id="s3-score-msg" class="mt8"></p>
+    <button class="btn btn-pr btn-full mt14" onclick="goHome()">홈으로 돌아가기</button>
+  </div>
+</div>
+
+<!-- STAGE 4 -->
+<div id="scr-s4" class="scr">
+  <div class="hdr"><h2>4단계: UN 기후 협상</h2><p>당신은 2035년 UN 기후 협상 대표입니다</p></div>
+  <!-- sub-panels -->
+  <div id="s4-country" class="card">
+    <h3>🌐 국가 대표 선택</h3>
+    <p class="mu sm mt8">협상에 임할 나라를 선택하세요. 선택한 나라의 입장에서 협상을 이끌게 됩니다.</p>
+    <div class="cgrid mt8">
+      <div class="ccard" onclick="s4selectCountry('kr')"><span class="fl">🇰🇷</span><div class="cn">한국</div><div class="cd">배출량 6억 톤/년<br>반도체·철강 수출 의존</div></div>
+      <div class="ccard" onclick="s4selectCountry('us')"><span class="fl">🇺🇸</span><div class="cn">미국</div><div class="cd">배출량 50억 톤/년<br>세계 2위 배출국</div></div>
+      <div class="ccard" onclick="s4selectCountry('bd')"><span class="fl">🇧🇩</span><div class="cn">방글라데시</div><div class="cd">배출량 0.9억 톤/년<br>해수면 2m 이하 국토 70%</div></div>
+      <div class="ccard" onclick="s4selectCountry('sa')"><span class="fl">🇸🇦</span><div class="cn">사우디아라비아</div><div class="cd">배출량 7억 톤/년<br>GDP 70%가 석유 수출</div></div>
+    </div>
+    <button id="s4-country-btn" class="btn btn-pr btn-full" onclick="s4toR1()" disabled>선택 완료 →</button>
+  </div>
+
+  <!-- R1 -->
+  <div id="s4-r1" style="display:none">
+    <div id="s4-nation-bar" class="nation-bar"></div>
+    <div class="card">
+      <div class="rnd-hdr"><div class="rnd-num">1</div><h3>라운드 1: 2035년 감축 목표 설정</h3></div>
+      <p>현재 전 세계 CO₂ 배출량은 <strong>370억 톤/년</strong>입니다.<br>2035년까지 <strong>185억 톤/년 이하</strong>로 줄여야 1.5°C를 지킬 수 있습니다.</p>
+      <div class="mbox mt8">
+        <span class="step">수학으로 확인:</span><br>
+        전 세계가 모두 같은 비율로 감축한다면, 50% 감축 시 → 370 × 0.5 = <strong>185억 톤</strong> ✓<br>
+        30% 감축 시 → 370 × 0.7 = <strong>259억 톤</strong> ✗ (목표 미달)
+      </div>
+      <p class="mt8"><strong>우리 나라의 2035년 감축 목표를 선택하세요:</strong></p>
+      <button class="cbtn" onclick="s4chooseR1('A')">🌿 <strong>50% 감축</strong> — 과감한 목표, 탄소중립 선도<span class="tag tag-ok">1.5°C 달성 기여</span></button>
+      <button class="cbtn" onclick="s4chooseR1('B')">⚖️ <strong>30% 감축</strong> — 현실적 목표, 경제·환경 균형<span class="tag tag-neu">부분 기여</span></button>
+      <button class="cbtn" onclick="s4chooseR1('C')">🏭 <strong>10% 감축</strong> — 소극적 대응, 자국 산업 최우선<span class="tag tag-no">목표 달성 어려움</span></button>
+      <div id="s4-r1-fb" class="fb"></div>
+    </div>
+  </div>
+
+  <!-- R2 -->
+  <div id="s4-r2" style="display:none">
+    <div id="s4-nation-bar2" class="nation-bar"></div>
+    <div class="card">
+      <div class="rnd-hdr"><div class="rnd-num">2</div><h3>라운드 2: 기후기금 협상</h3></div>
+      <div id="s4-r1-effect" class="bfly"></div>
+      <p class="mt8">개발도상국이 기후 대응을 할 수 있도록 선진국이 <strong>기후기금</strong>을 지원하는 안건이 상정되었습니다.</p>
+      <p class="mt8"><strong>기후기금에 대한 입장을 선택하세요:</strong></p>
+      <button class="cbtn" onclick="s4chooseR2('A')">💚 <strong>연 1,000억 달러 적극 지지</strong> — 개발도상국 기후 대응 전면 지원</button>
+      <button class="cbtn" onclick="s4chooseR2('B')">🤝 <strong>연 500억 달러 조건부 지지</strong> — 자국 감축 성과와 연동</button>
+      <button class="cbtn" onclick="s4chooseR2('C')">❌ <strong>기후기금 반대</strong> — 자국 경제 부담 과도</button>
+      <div id="s4-r2-fb" class="fb"></div>
+    </div>
+  </div>
+
+  <!-- R3 -->
+  <div id="s4-r3" style="display:none">
+    <div id="s4-nation-bar3" class="nation-bar"></div>
+    <div class="card">
+      <div class="rnd-hdr"><div class="rnd-num">3</div><h3>라운드 3: 2030년 위기 대응</h3></div>
+      <div id="s4-r3-situation" class="al mt8"></div>
+      <p class="mt8"><strong>위기에 어떻게 대응하겠습니까?</strong></p>
+      <div id="s4-r3-choices"></div>
+      <div id="s4-r3-fb" class="fb"></div>
+    </div>
+  </div>
+
+  <!-- R4 -->
+  <div id="s4-r4" style="display:none">
+    <div id="s4-nation-bar4" class="nation-bar"></div>
+    <div class="card">
+      <div class="rnd-hdr"><div class="rnd-num">4</div><h3>라운드 4: 2035 UN 최종 선언</h3></div>
+      <div id="s4-r3-effect" class="bfly"></div>
+      <p class="mt8">드디어 2035 UN 기후 정상 회담 최종 선언의 순간이 왔습니다. 지금까지의 협상 결과를 바탕으로 어떤 입장을 취하겠습니까?</p>
+      <button class="cbtn" onclick="s4chooseR4('A')">🌍 <strong>1.5°C 목표 재확인</strong> — 추가 감축 방안 마련, 2040년 중간 점검<span class="tag tag-ok">최선의 선택</span></button>
+      <button class="cbtn" onclick="s4chooseR4('B')">🌡️ <strong>2°C 목표로 완화</strong> — 더 현실적인 목표 선호</button>
+      <button class="cbtn" onclick="s4chooseR4('C')">🚪 <strong>서명 거부</strong> — 자국 경제를 이유로 불참</button>
+      <div id="s4-r4-fb" class="fb"></div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div id="s4-result" style="display:none">
+    <div class="card">
+      <div class="grade-wrap">
+        <div id="s4-gcircle" class="gcircle"></div>
+        <h2 id="s4-grade-title"></h2>
+        <p id="s4-grade-msg" class="mt8 mu"></p>
+      </div>
+      <div class="sbk">
+        <div class="srow"><span>라운드 1 (감축 목표)</span><span id="s4-r1-pts"></span></div>
+        <div class="srow"><span>라운드 2 (기후기금)</span><span id="s4-r2-pts"></span></div>
+        <div class="srow"><span>라운드 3 (위기 대응)</span><span id="s4-r3-pts"></span></div>
+        <div class="srow"><span>라운드 4 (최종 선언)</span><span id="s4-r4-pts"></span></div>
+        <div class="srow"><span>협상 총점</span><span id="s4-total-pts"></span></div>
+      </div>
+      <div id="s4-bonus-info" class="al al-ok"></div>
+      <button class="btn btn-pr btn-full mt14" onclick="completeS4()">5단계로 이동 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 5 -->
+<div id="scr-s5" class="scr">
+  <div class="hdr"><h2>5단계: 마무리 & 다짐</h2><p>오늘 배운 것을 정리하고, 나의 실천을 약속해요</p></div>
+  <div class="card">
+    <h3>📌 오늘 우리가 만난 숫자들</h3>
+    <div class="num-summary">
+      <div class="ns-item"><div class="nv">0.5°C</div><div class="nd">산호초 29%p · 1,000만 명을 구하는 차이</div></div>
+      <div class="ns-item"><div class="nv">2037년</div><div class="nd">현 추세대로면 1.5°C 돌파 예상</div></div>
+      <div class="ns-item"><div class="nv">2,000억 톤</div><div class="nd">인류에게 남은 탄소 예산 (약 5년치)</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🌱 나의 탄소발자국 줄이기 계산기</h3>
+    <p class="mu sm">매달 실천하면 줄일 수 있는 CO₂ 양을 계산해봐요.</p>
+    <div class="mt8" id="s5-items">
+      <div class="citem"><input type="checkbox" id="ci0" onchange="s5calcCarbon()"><label for="ci0" class="iname">버스 대신 도보·자전거 (월 10회)</label><span class="ival">−2,000g</span></div>
+      <div class="citem"><input type="checkbox" id="ci1" onchange="s5calcCarbon()"><label for="ci1" class="iname">고기 대신 채식 (월 4끼)</label><span class="ival">−8,000g</span></div>
+      <div class="citem"><input type="checkbox" id="ci2" onchange="s5calcCarbon()"><label for="ci2" class="iname">에어컨 1시간 절약 (월 20회)</label><span class="ival">−14,000g</span></div>
+      <div class="citem"><input type="checkbox" id="ci3" onchange="s5calcCarbon()"><label for="ci3" class="iname">전기요금 1만원 절약 (가족 협력)</label><span class="ival">−4,000g</span></div>
+      <div class="citem"><input type="checkbox" id="ci4" onchange="s5calcCarbon()"><label for="ci4" class="iname">샤워 시간 5분 단축 (월 20회)</label><span class="ival">−6,000g</span></div>
+      <div class="citem"><input type="checkbox" id="ci5" onchange="s5calcCarbon()"><label for="ci5" class="iname">대기전력 차단기 사용</label><span class="ival">−10,000g</span></div>
+    </div>
+    <div class="al al-ok mt8">
+      월 감축량: <strong id="s5-monthly">0g</strong> &nbsp;|&nbsp;
+      10년 누적: <strong id="s5-10yr">0kg</strong>
+      <div class="mt8 sm" id="s5-func-msg" style="color:var(--gn)"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>✍️ 나의 기후 다짐</h3>
+    <p class="mu sm">오늘 배운 것 중 가장 기억에 남는 숫자와, 내가 실천할 한 가지를 써보세요. (10자 이상)</p>
+    <textarea id="s5-pledge" placeholder="예: 0.5도 차이가 1,000만 명의 운명을 바꾼다는 것을 배웠다. 나는 매일 샤워 시간을 5분 줄이겠다." oninput="s5pledgeCheck()"></textarea>
+    <div id="s5-pledge-count" class="sm mu mt8">0 / 10자 이상</div>
+    <button id="s5-submit-btn" class="btn btn-pr btn-full mt8" onclick="s5submit()" disabled>다짐 제출하기</button>
+  </div>
+
+  <!-- Final score -->
+  <div id="s5-final" style="display:none">
+    <div class="card">
+      <div class="grade-wrap">
+        <div id="s5-gcircle" class="gcircle"></div>
+        <h2 id="s5-grade-title"></h2>
+        <p id="s5-grade-msg" class="mt8 mu"></p>
+      </div>
+      <div class="sbk">
+        <div class="srow"><span>1단계 — 1.5도의 의미</span><span id="fin-s1"></span></div>
+        <div class="srow"><span>2단계 — 탄소 시계</span><span id="fin-s2"></span></div>
+        <div class="srow"><span>3단계 — 탄소 예산</span><span id="fin-s3"></span></div>
+        <div class="srow"><span>4단계 — UN 협상</span><span id="fin-s4"></span></div>
+        <div class="srow"><span>총점</span><span id="fin-total"></span></div>
+      </div>
+    </div>
+
+    <div class="glcard">
+      <h3>🎮 기후 디펜스 게임</h3>
+      <div id="s5-bonus-chip" class="bonus-chip"></div>
+      <p>지금까지 배운 전략으로 기후 디펜스 게임에 도전해보세요!<br>UN 협상 등급에 따라 보너스 연구력을 받습니다.</p>
+      <button class="btn-game" onclick="launchGame()">🌍 기후 디펜스 시작하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SAVE_KEY = 'eco_math_s2_v1';
+
+const COUNTRY_DATA = {
+  kr:{flag:'🇰🇷',name:'한국',emit:'6억 톤/년',desc:'반도체·철강 수출 의존, 재생에너지 전환 중'},
+  us:{flag:'🇺🇸',name:'미국',emit:'50억 톤/년',desc:'세계 2위 배출국, 에너지 독립 추구'},
+  bd:{flag:'🇧🇩',name:'방글라데시',emit:'0.9억 톤/년',desc:'국토 70% 해수면 2m 이하, 기후 피해 최전선'},
+  sa:{flag:'🇸🇦',name:'사우디아라비아',emit:'7억 톤/년',desc:'GDP 70% 석유 수출, 감축 압박 직면'}
+};
+
+const R1_SCORES = {A:30,B:15,C:5};
+const R2_SCORES = {A:25,B:12,C:0};
+const R3_SCORES_GOOD = {A:25,B:15,C:5};
+const R3_SCORES_BAD  = {A:20,B:12,C:3};
+const R4_SCORES = {A:20,B:10,C:0};
+
+const CARBON_VALS = [2000,8000,14000,4000,6000,10000];
+
+const PW_HASH='fb9e692b52ad41cd666f83c8175df90569d48192d531e9c94285929bc116891a';
+let isAdmin=false;
+let gs = loadState();
+let s2Chart = null;
+
+function defaultState(){
+  return {
+    name:'',grade:'',cls:'',num:'',
+    unlocked:{s1:true,s2:false,s3:false,s4:false,s5:false},
+    done:{s1:false,s2:false,s3:false,s4:false,s5:false},
+    scores:{s1:0,s2:0,s3:0,s4:0},
+    s1:{q:[null,null,null,null,null]},
+    s2:{funcOk:false,calcOk:false},
+    s3:{q1ok:false,q2ok:false,judgeOk:false},
+    s4:{country:null,r1:null,r2:null,r3:null,r4:null,score:0,grade:null,path:null},
+    s5:{pledge:'',done:false},
+    bonus:0
+  };
+}
+
+function loadState(){
+  try{const s=localStorage.getItem(SAVE_KEY);if(s)return JSON.parse(s);}catch(e){}
+  return defaultState();
+}
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(gs));}catch(e){}}
+
+function showScr(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById('scr-'+id).classList.add('on');
+  window.scrollTo(0,0);
+}
+
+async function hashPw(pw){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function showStudentForm(){
+  document.getElementById('roleSelect').style.display='none';
+  document.getElementById('studentForm').style.display='block';
+  setTimeout(()=>document.getElementById('loginName').focus(),100);
+}
+function showTeacherForm(){
+  document.getElementById('roleSelect').style.display='none';
+  document.getElementById('teacherForm').style.display='block';
+  setTimeout(()=>document.getElementById('teacherPw').focus(),100);
+}
+function backToRole(){
+  document.getElementById('studentForm').style.display='none';
+  document.getElementById('teacherForm').style.display='none';
+  document.getElementById('roleSelect').style.display='block';
+  document.getElementById('studentError').style.display='none';
+  document.getElementById('teacherError').style.display='none';
+}
+
+function startAsStudent(){
+  const g=document.getElementById('loginGrade').value.trim();
+  const c=document.getElementById('loginClass').value.trim();
+  const n=document.getElementById('loginNum').value.trim();
+  const nm=document.getElementById('loginName').value.trim();
+  if(!g||!c||!n||!nm){document.getElementById('studentError').style.display='block';return;}
+  document.getElementById('studentError').style.display='none';
+  gs.grade=g; gs.cls=c; gs.num=n; gs.name=nm;
+  save();
+  launchApp(false);
+}
+
+async function startAsTeacher(){
+  const pw=document.getElementById('teacherPw').value;
+  const hash=await hashPw(pw);
+  if(hash===PW_HASH){
+    document.getElementById('teacherError').style.display='none';
+    gs.name='선생님'; gs.grade=''; gs.cls=''; gs.num='';
+    save();
+    launchApp(true);
+  } else {
+    document.getElementById('teacherError').style.display='block';
+    document.getElementById('teacherPw').value='';
+    document.getElementById('teacherPw').focus();
+  }
+}
+
+function launchApp(admin){
+  isAdmin=admin;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('topbar').classList.add('show');
+  const nameLabel=admin?'선생님 (관리자 모드)':
+    `${gs.name} (${gs.grade}학년 ${gs.cls}반 ${gs.num}번)`;
+  document.getElementById('topbar-name').textContent=nameLabel;
+  if(admin)document.getElementById('admin-toggle-btn').style.display='inline-block';
+  renderHome();
+  showScr('home');
+}
+
+function toggleAdminPanel(){
+  document.getElementById('admin-panel').classList.toggle('show');
+}
+
+function adminGoStage(id){
+  Object.keys(gs.unlocked).forEach(k=>gs.unlocked[k]=true);
+  document.getElementById('admin-panel').classList.remove('show');
+  // active-stage 표시
+  document.querySelectorAll('.admin-btn').forEach(b=>b.classList.remove('active-stage'));
+  if(id==='home'){renderHome();showScr('home');return;}
+  if(id==='s2')initS2();
+  if(id==='s4')initS4();
+  showScr(id);
+  window.scrollTo(0,0);
+}
+
+function adminUnlockCards(...ids){
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.opacity='1';el.style.pointerEvents='auto';}
+  });
+}
+
+function adminGoQuiz(val){
+  if(!val)return;
+  document.getElementById('adminQSelect').value='';
+  Object.keys(gs.unlocked).forEach(k=>gs.unlocked[k]=true);
+  document.getElementById('admin-panel').classList.remove('show');
+
+  if(val==='s1_q1'){adminGoStage('s1');}
+  else if(val==='s1_q2'){adminGoStage('s1');setTimeout(()=>adminUnlockCards('s1-q2-card'),100);}
+  else if(val==='s1_q3'){adminGoStage('s1');setTimeout(()=>adminUnlockCards('s1-q2-card','s1-q3-card'),100);}
+  else if(val==='s1_q4'){adminGoStage('s1');setTimeout(()=>adminUnlockCards('s1-q2-card','s1-q3-card','s1-q4-card'),100);}
+  else if(val==='s1_q5'){adminGoStage('s1');setTimeout(()=>adminUnlockCards('s1-q2-card','s1-q3-card','s1-q4-card','s1-q5-card'),100);}
+  else if(val==='s2_q1'){adminGoStage('s2');}
+  else if(val==='s2_q2'){adminGoStage('s2');setTimeout(()=>adminUnlockCards('s2-q2-card'),300);}
+  else if(val==='s2_adv'){adminGoStage('s2');setTimeout(()=>adminUnlockCards('s2-q2-card','s2-adv-card'),300);}
+  else if(val==='s3_q1'){adminGoStage('s3');}
+  else if(val==='s3_q2'){adminGoStage('s3');setTimeout(()=>adminUnlockCards('s3-q2-card'),100);}
+  else if(val==='s3_q3'){adminGoStage('s3');setTimeout(()=>{adminUnlockCards('s3-q2-card','s3-cj-card','s3-q3-card');renderS3Compare();},100);}
+  else if(val==='s4_r0'){adminGoStage('s4');}
+  else if(val.startsWith('s4_r')){
+    const rn=parseInt(val.replace('s4_r',''));
+    adminGoStage('s4');
+    setTimeout(()=>{
+      if(!gs.s4.country)gs.s4.country='kr';
+      ['s4-country','s4-r1','s4-r2','s4-r3','s4-r4','s4-result'].forEach(id=>
+        document.getElementById(id).style.display='none');
+      const target=rn===0?'s4-country':'s4-r'+rn;
+      document.getElementById(target).style.display='block';
+      s4nationBar('s4-nation-bar');s4nationBar('s4-nation-bar2');
+      s4nationBar('s4-nation-bar3');s4nationBar('s4-nation-bar4');
+    },100);
+  }
+  else if(val==='s5'){adminGoStage('s5');}
+}
+
+function logout(){
+  localStorage.removeItem(SAVE_KEY);
+  location.reload();
+}
+
+function adminReset(){
+  if(!confirm('모든 학습 진행 상황을 초기화합니다. 계속하시겠습니까?'))return;
+  localStorage.removeItem(SAVE_KEY);
+  location.reload();
+}
+
+function goHome(){
+  renderHome();
+  showScr('home');
+}
+
+function renderHome(){
+  document.getElementById('h-welcome').textContent=`${gs.name} 학생, 반갑습니다! (${gs.grade}학년 ${gs.cls}반 ${gs.num}번)`;
+  const total=gs.scores.s1+gs.scores.s2+gs.scores.s3+Math.round(gs.scores.s4);
+  document.getElementById('h-score-chip').textContent=`${total}점`;
+  const stages=[
+    {id:'s1',label:'1단계',title:'1.5도의 의미'},
+    {id:'s2',label:'2단계',title:'탄소 시계'},
+    {id:'s3',label:'3단계',title:'탄소 예산'},
+    {id:'s4',label:'4단계',title:'UN 협상'},
+    {id:'s5',label:'5단계',title:'마무리'}
+  ];
+  const navEl=document.getElementById('h-snav');
+  navEl.innerHTML=stages.map(s=>{
+    const cls=gs.done[s.id]?'sdot done':gs.unlocked[s.id]?'sdot cur':'sdot lock';
+    const icon=gs.done[s.id]?'✓ ':'';
+    return `<div class="${cls}" onclick="goStage('${s.id}')">${icon}${s.label}<br><span style="font-size:10px;font-weight:400;opacity:.75">${s.title}</span></div>`;
+  }).join('');
+  const stEl=document.getElementById('h-stages');
+  stEl.innerHTML=stages.map(s=>{
+    const locked=!gs.unlocked[s.id];
+    const done=gs.done[s.id];
+    const scoreMap={s1:'/ 30점',s2:'/ 20점',s3:'/ 30점',s4:'/ 20점',s5:''};
+    const sc=s.id==='s4'?Math.round(gs.scores.s4):gs.scores[s.id];
+    return `<div class="card" style="opacity:${locked?'.5':'1'}">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><h3>${s.label}: ${s.title}</h3>${done?`<span style="color:var(--gn);font-size:.85rem">✓ 완료 · ${sc}${scoreMap[s.id]}</span>`:locked?`<span class="mu sm">🔒 이전 단계를 완료하세요</span>`:`<span class="mu sm">진행 중</span>`}</div>
+        ${!locked?`<button class="btn btn-ol" onclick="goStage('${s.id}')">${done?'다시보기':'계속하기'}</button>`:''}
+      </div></div>`;
+  }).join('');
+}
+
+function goStage(id){
+  if(!gs.unlocked[id]){alert('이전 단계를 먼저 완료해주세요.');return;}
+  if(id==='s2')initS2();
+  if(id==='s4')initS4();
+  showScr(id);
+}
+
+function unlockNext(cur){
+  const order=['s1','s2','s3','s4','s5'];
+  const idx=order.indexOf(cur);
+  if(idx>=0&&idx<order.length-1){gs.unlocked[order[idx+1]]=true;}
+  gs.done[cur]=true;
+  save();
+}
+
+/* ─── STAGE 1 ─────────────────────────── */
+const S1 = [
+  {ans:1, exp:'정답은 ②0.5°C입니다.\n1.5°C와 2°C의 차이 = 0.5°C. 숫자는 작지만 산호초 29%p, 해수면 10cm, 1,000만 명의 차이를 만듭니다!'},
+  {ans:1, exp:'정답은 ②10cm입니다.\n1.5°C→26cm, 2°C→36cm → 차이 = 10cm\n이 10cm가 전 세계 약 1,000만 명을 침수 위기에서 구합니다.'},
+  {ans:1, exp:'정답은 ②7.5만 km²입니다.\n살아남는 비율 = 100% − 70% = 30%\n25만 km² × 0.30 = 7.5만 km²\n70%가 사라진다는 말은 30%만 살아남는다는 뜻입니다!'},
+  {ans:2, exp:'정답은 ③1,000만 명입니다.\nIPCC 연구에 따르면, 해수면이 10cm 더 상승(26cm→36cm)하면 전 세계 약 1,000만 명이 추가로 침수 위기에 처하게 됩니다.\n0.5°C의 차이가 1,000만 명의 삶을 결정합니다!'},
+  {ans:1, exp:'정답은 ②29%p 증가했다입니다.\n%p(퍼센트포인트)는 두 비율의 차이: 99 − 70 = 29%p\n③41.4% 증가는 상대 증가율(29÷70×100≈41.4%)로 다른 개념입니다.\n비율의 변화는 %p, 변화의 크기는 %로 표현합니다!'}
+];
+
+function s1check(qnum, choice){
+  const q=S1[qnum-1];
+  const opts=document.querySelectorAll(`#s1-q${qnum}-opts .qopt`);
+  opts.forEach(b=>b.disabled=true);
+  const fb=document.getElementById(`s1-q${qnum}-fb`);
+  if(choice===q.ans){
+    opts[choice].classList.add('ok');
+    fb.className='fb ok';
+    fb.innerHTML='✅ ' + q.exp.replace(/\n/g,'<br>');
+    if(!gs.s1.q[qnum-1]){gs.s1.q[qnum-1]=true;gs.scores.s1+=6;save();}
+    setTimeout(()=>{
+      if(qnum<5){
+        const next=document.getElementById(`s1-q${qnum+1}-card`);
+        next.style.opacity='1';next.style.pointerEvents='auto';
+      } else {
+        s1finish();
+      }
+    },1500);
+  } else {
+    opts[choice].classList.add('no');
+    fb.className='fb no';
+    fb.textContent='❌ 다시 생각해보세요.';
+    opts.forEach(b=>b.disabled=false);
+    opts[choice].disabled=true;
+  }
+}
+
+function s1finish(){
+  unlockNext('s1');
+  document.getElementById('s1-done-card').style.display='block';
+  document.getElementById('s1-score-msg').textContent=`획득 점수: ${gs.scores.s1} / 30점`;
+}
+
+/* ─── STAGE 2 ─────────────────────────── */
+function initS2(){
+  setTimeout(()=>{
+    if(!s2Chart){
+      const ctx=document.getElementById('s2-chart').getContext('2d');
+      s2Chart=new Chart(ctx,buildS2Config(2.4));
+    }
+    if(gs.s2.funcOk){
+      document.getElementById('s2-q2-card').style.opacity='1';
+      document.getElementById('s2-q2-card').style.pointerEvents='auto';
+    }
+    if(gs.s2.calcOk){
+      document.getElementById('s2-adv-card').style.opacity='1';
+      document.getElementById('s2-adv-card').style.pointerEvents='auto';
+    }
+  },200);
+}
+
+function buildS2Config(rate){
+  const yrs=Array.from({length:31},(_,i)=>2026+i);
+  const data=yrs.map((_,i)=>+(rate*i+424).toFixed(2));
+  const crossIdx=Math.round(26/rate);
+  const dotData=Array(31).fill(null);
+  const dotR=Array(31).fill(0);
+  if(crossIdx>=0&&crossIdx<31){dotData[crossIdx]=450;dotR[crossIdx]=10;}
+  return {
+    type:'line',
+    data:{
+      labels:yrs,
+      datasets:[
+        {label:`CO₂ 농도 (${rate.toFixed(1)} ppm/년 증가)`,data,borderColor:'#1565c0',backgroundColor:'rgba(21,101,192,0.1)',fill:true,tension:0.1,pointRadius:0,borderWidth:2.5},
+        {label:'1.5°C 기준 (450 ppm)',data:Array(31).fill(450),borderColor:'#c62828',borderDash:[8,4],borderWidth:2,pointRadius:0,fill:false},
+        {label:'교차점 (1.5°C 돌파)',data:dotData,borderColor:'#e65100',backgroundColor:'rgba(230,81,0,0.85)',pointRadius:dotR,pointHoverRadius:dotR.map(r=>r?13:0),showLine:false,pointStyle:'circle'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      scales:{x:{ticks:{maxTicksLimit:7},title:{display:true,text:'연도'}},y:{min:420,max:480,title:{display:true,text:'CO₂ (ppm)'}}},
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y} ppm`}}}
+    }
+  };
+}
+
+function s2updateChart(){
+  const rate=parseFloat(document.getElementById('s2-slider').value);
+  document.getElementById('s2-rate-lbl').textContent=rate.toFixed(1)+' ppm/년';
+  const x=(450-424)/rate;
+  const yr=Math.round(2026+x);
+  document.getElementById('s2-cross-lbl').textContent=`${yr}년 (약 ${x.toFixed(1)}년 후)`;
+  const vals=Array.from({length:31},(_,i)=>+(rate*i+424).toFixed(2));
+  const crossIdx=Math.round(x);
+  const dotData=Array(31).fill(null);
+  const dotR=Array(31).fill(0);
+  if(crossIdx>=0&&crossIdx<31){dotData[crossIdx]=450;dotR[crossIdx]=10;}
+  s2Chart.data.datasets[0].data=vals;
+  s2Chart.data.datasets[0].label=`CO₂ 농도 (${rate.toFixed(1)} ppm/년 증가)`;
+  s2Chart.data.datasets[2].data=dotData;
+  s2Chart.data.datasets[2].pointRadius=dotR;
+  s2Chart.data.datasets[2].pointHoverRadius=dotR.map(r=>r?13:0);
+  s2Chart.update();
+}
+
+function s2checkFunc(){
+  const slope=parseFloat(document.getElementById('s2-slope').value);
+  const intercept=parseFloat(document.getElementById('s2-intercept').value);
+  const fb=document.getElementById('s2-q1-fb');
+  if(Math.abs(slope-2.4)<=0.1&&Math.abs(intercept-424)<=2){
+    fb.className='fb ok';
+    fb.innerHTML='✅ 정답! <strong>y = 2.4x + 424</strong><br>기울기 2.4는 매년 2.4 ppm 증가, y절편 424는 2026년 초기값입니다.';
+    if(!gs.s2.funcOk){gs.s2.funcOk=true;gs.scores.s2+=10;save();}
+    setTimeout(()=>{
+      const c=document.getElementById('s2-q2-card');c.style.opacity='1';c.style.pointerEvents='auto';
+    },1200);
+  } else {
+    fb.className='fb no';
+    fb.textContent='❌ 다시 확인해보세요. 기울기는 매년 변화량, y절편은 2026년 초기 농도입니다.';
+  }
+}
+
+function s2checkCalc(){
+  const xv=parseFloat(document.getElementById('s2-xval').value);
+  const yr=parseFloat(document.getElementById('s2-year').value);
+  const fb=document.getElementById('s2-q2-fb');
+  if(xv>=10&&xv<=12&&yr>=2035&&yr<=2039){
+    fb.className='fb ok';
+    fb.innerHTML='✅ 정답! x ≈ 10.8년 → <strong>약 2037년</strong>에 1.5°C를 돌파합니다.<br>지금 중2인 여러분이 대학생이 될 무렵입니다.';
+    if(!gs.s2.calcOk){gs.s2.calcOk=true;gs.scores.s2+=10;save();}
+    unlockNext('s2');
+    setTimeout(()=>{
+      const c=document.getElementById('s2-adv-card');c.style.opacity='1';c.style.pointerEvents='auto';
+      document.getElementById('s2-done-card').style.display='block';
+      document.getElementById('s2-score-msg').textContent=`획득 점수: ${gs.scores.s2} / 20점`;
+    },1200);
+  } else {
+    fb.className='fb no';
+    fb.textContent='❌ 다시 계산해보세요. 2.4x = 26이면 x = ?';
+  }
+}
+
+/* ─── STAGE 3 ─────────────────────────── */
+function s3checkQ1(){
+  const a=parseFloat(document.getElementById('s3-q1a').value);
+  const b=parseFloat(document.getElementById('s3-q1b').value);
+  const fb=document.getElementById('s3-q1-fb');
+  if(Math.abs(a-1333)<=20&&Math.abs(b-667)<=20){
+    fb.className='fb ok';
+    fb.innerHTML='✅ 정답! a ≈ 1,333억 톤, b ≈ 667억 톤<br>풀이: 3b = 2000 → b = 667, a = 2×667 = 1,333';
+    if(!gs.s3.q1ok){gs.s3.q1ok=true;gs.scores.s3+=15;save();}
+    setTimeout(()=>{
+      const c=document.getElementById('s3-q2-card');c.style.opacity='1';c.style.pointerEvents='auto';
+    },1200);
+  } else {
+    fb.className='fb no';
+    fb.textContent='❌ b = 2000 ÷ 3 ≈ 667억 톤, a = 2b = ?';
+  }
+}
+
+function s3checkQ2(){
+  const a=parseFloat(document.getElementById('s3-q2a').value);
+  const b=parseFloat(document.getElementById('s3-q2b').value);
+  const fb=document.getElementById('s3-q2-fb');
+  if(Math.abs(a-400)<=5&&Math.abs(b-1600)<=5){
+    fb.className='fb ok';
+    fb.innerHTML='✅ 정답! 선진국 400억 톤, 개발도상국 1,600억 톤<br>풀이: 2000 ÷ 5 = 400, 선진국(1칸) = 400, 개발도상국(4칸) = 1,600';
+    if(!gs.s3.q2ok){gs.s3.q2ok=true;gs.scores.s3+=15;save();}
+    setTimeout(()=>{
+      const c=document.getElementById('s3-cj-card');c.style.opacity='1';c.style.pointerEvents='auto';
+    },1200);
+  } else {
+    fb.className='fb no';
+    fb.textContent='❌ 2000 ÷ (1+4) = 400 → 선진국: 400×1, 개발도상국: 400×4';
+  }
+}
+
+function s3showJudge(){
+  const c=document.getElementById('s3-q3-card');
+  c.style.opacity='1';c.style.pointerEvents='auto';
+  renderS3Compare();
+  c.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderS3Compare(){
+  document.getElementById('s3-compare-table').innerHTML=`
+    <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+      <tr style="background:var(--bg)"><th style="padding:8px;border:1px solid #ddd">시나리오</th><th style="padding:8px;border:1px solid #ddd">선진국(a)</th><th style="padding:8px;border:1px solid #ddd">개발도상국(b)</th></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd">① 현재 배출 비율 (2:1)</td><td style="padding:8px;border:1px solid #ddd;color:var(--rd);font-weight:700">1,333억 톤</td><td style="padding:8px;border:1px solid #ddd">667억 톤</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd">② 인구 비례 (1:4)</td><td style="padding:8px;border:1px solid #ddd;color:var(--gn);font-weight:700">400억 톤</td><td style="padding:8px;border:1px solid #ddd">1,600억 톤</td></tr>
+    </table>
+    <p class="mu sm mt8">💡 선진국 인구는 세계의 약 20%이지만, 시나리오①에서는 탄소 예산의 67%를 가져갑니다.</p>`;
+}
+
+function s3judgeChange(){
+  const r=document.querySelector('input[name="s3-judge"]:checked');
+  const txt=document.getElementById('s3-reason').value.trim();
+  document.getElementById('s3-submit-btn').disabled=!(r&&txt.length>=10);
+}
+
+document.addEventListener('input',e=>{
+  if(e.target.id==='s3-reason'){
+    const txt=e.target.value.trim();
+    const r=document.querySelector('input[name="s3-judge"]:checked');
+    document.getElementById('s3-submit-btn').disabled=!(r&&txt.length>=10);
+  }
+});
+
+function s3submitJudge(){
+  const r=document.querySelector('input[name="s3-judge"]:checked').value;
+  const txt=document.getElementById('s3-reason').value.trim();
+  const fb=document.getElementById('s3-q3-fb');
+  const isUnfair=(r==='unfair');
+  fb.className='fb '+(isUnfair?'ok':'info');
+  fb.innerHTML=(isUnfair
+    ?'✅ 맞습니다! 시나리오①은 불공정합니다.<br><br><strong>🌍 기후 정의(Climate Justice)란?</strong><br>기후 위기의 원인과 피해가 균등하지 않다는 인식에서 출발한 개념입니다. 선진국들은 산업혁명 이후 150년간 대부분의 탄소를 배출해왔지만, 그 피해는 배출량이 적은 개발도상국·섬나라·빈곤층이 더 크게 받습니다.<br><br><strong>📊 시나리오①이 불공정한 이유:</strong><br>선진국은 세계 인구의 약 20%에 불과하지만 "현재 배출 비율" 기준으로 탄소 예산의 <strong>67%(약 1,333억 톤)</strong>를 가져갑니다. 반면 세계 인구 80%인 개발도상국은 <strong>33%(약 667억 톤)</strong>만 배분받습니다.<br><br>기후 정의 관점에서는 역사적 배출 책임 + 현재 인구 + 취약성을 함께 고려해야 합니다. 시나리오②(인구 비례)가 그 첫걸음입니다.'
+    :'💭 흥미로운 관점입니다. 현재 배출 비율대로 나누는 것이 공정하다고 봤군요. 그러나 <strong>기후 정의(Climate Justice)</strong> 관점에서는 다른 시각도 있습니다.<br>선진국은 세계 인구의 20%이지만 탄소 예산의 67%를 차지하며, 역사적으로 더 많은 탄소를 배출해왔습니다. 인구와 역사적 책임을 함께 고려하면 어떨까요?')
+    +`<br><br>📝 나의 의견: "${txt}"`;
+  if(!gs.s3.judgeOk){gs.s3.judgeOk=true;save();}
+  unlockNext('s3');
+  document.getElementById('s3-submit-btn').disabled=true;
+  setTimeout(()=>{
+    document.getElementById('s3-done-card').style.display='block';
+    document.getElementById('s3-score-msg').textContent=`획득 점수: ${gs.scores.s3} / 30점`;
+  },1500);
+}
+
+/* ─── STAGE 4 ─────────────────────────── */
+function initS4(){
+  const panels=['s4-r1','s4-r2','s4-r3','s4-r4','s4-result'];
+  panels.forEach(p=>document.getElementById(p).style.display='none');
+  if(gs.s4.country){document.querySelectorAll('.ccard').forEach(c=>c.classList.remove('sel'));const cc=document.querySelector(`.ccard[onclick="s4selectCountry('${gs.s4.country}')"]`);if(cc)cc.classList.add('sel');document.getElementById('s4-country-btn').disabled=false;}
+}
+
+function s4selectCountry(id){
+  document.querySelectorAll('.ccard').forEach(c=>c.classList.remove('sel'));
+  event.currentTarget.classList.add('sel');
+  gs.s4.country=id; save();
+  document.getElementById('s4-country-btn').disabled=false;
+}
+
+function s4nationBar(elId){
+  const c=COUNTRY_DATA[gs.s4.country];
+  const el=document.getElementById(elId);
+  if(el)el.innerHTML=`<span class="fl2">${c.flag}</span><div class="dt"><strong>${c.name} 대표</strong><br>${c.emit} · ${c.desc}</div>`;
+}
+
+function s4toR1(){
+  if(!gs.s4.country)return;
+  document.getElementById('s4-country').style.display='none';
+  document.getElementById('s4-r1').style.display='block';
+  s4nationBar('s4-nation-bar');
+}
+
+function s4chooseR1(ch){
+  gs.s4.r1=ch;
+  const msgs={A:'🌿 50% 감축 선택 — 강력한 의지를 보였습니다. 전 세계가 같은 목표를 따른다면 370×0.5=185억 톤 → 목표 달성 가능!',B:'⚖️ 30% 감축 선택 — 온건한 목표입니다. 370×0.7=259억 톤으로 목표(185억) 달성에는 부족합니다.',C:'🏭 10% 감축 선택 — 소극적 대응입니다. 370×0.9=333억 톤으로 목표와 큰 차이가 있습니다.'};
+  const fb=document.getElementById('s4-r1-fb');
+  fb.className='fb info';
+  fb.textContent=msgs[ch];
+  document.querySelectorAll('#s4-r1 .cbtn').forEach(b=>{b.disabled=true;b.classList.remove('sel')});
+  event.currentTarget.classList.add('sel');
+  save();
+  setTimeout(()=>{
+    document.getElementById('s4-r1').style.display='none';
+    document.getElementById('s4-r2').style.display='block';
+    s4nationBar('s4-nation-bar2');
+    const effectEl=document.getElementById('s4-r1-effect');
+    effectEl.innerHTML=`<div class="bt">🦋 나비효과</div>`+(ch==='A'?'강력한 감축 목표 발표로 국제 협상 분위기가 활기를 띠고 있습니다. 개발도상국들도 기대감을 높이고 있습니다.':'낮은 감축 목표로 국제 여론이 냉담합니다. 개발도상국은 선진국의 진정성에 의문을 품고 있습니다.');
+  },2000);
+}
+
+function s4chooseR2(ch){
+  gs.s4.r2=ch;
+  gs.s4.path=(gs.s4.r1==='A'&&(ch==='A'||ch==='B'))?'good':'bad';
+  const msgs={A:'💚 적극 지지 — 개발도상국의 신뢰를 얻었습니다.',B:'🤝 조건부 지지 — 중간 입장을 택했습니다.',C:'❌ 반대 — 개발도상국과의 갈등이 깊어집니다.'};
+  const fb=document.getElementById('s4-r2-fb');
+  fb.className='fb info';fb.textContent=msgs[ch];
+  document.querySelectorAll('#s4-r2 .cbtn').forEach(b=>b.disabled=true);
+  event.currentTarget.classList.add('sel');
+  save();
+  setTimeout(()=>{
+    document.getElementById('s4-r2').style.display='none';
+    document.getElementById('s4-r3').style.display='block';
+    s4nationBar('s4-nation-bar3');
+    const sit=document.getElementById('s4-r3-situation');
+    const choicesEl=document.getElementById('s4-r3-choices');
+    if(gs.s4.path==='good'){
+      sit.className='al al-ok';
+      sit.innerHTML='<strong>2030년 중간 보고:</strong> 주요국 감축 목표 이행률이 기대치를 초과했습니다! 그러나 방글라데시·몰디브 등 소도서 국가들이 폭염과 해수면 상승으로 <strong>긴급 지원</strong>을 요청하고 있습니다.';
+      choicesEl.innerHTML=`
+        <button class="cbtn" onclick="s4chooseR3('A')">🚨 <strong>긴급 기후 지원 확대</strong> — 피해국 이주·복구 적극 지원</button>
+        <button class="cbtn" onclick="s4chooseR3('B')">🔬 <strong>기후 적응 기술 이전</strong> — 재생에너지·방재 기술 공유</button>
+        <button class="cbtn" onclick="s4chooseR3('C')">🤷 <strong>각국 자체 해결 원칙</strong> — 현 상태 유지</button>`;
+    } else {
+      sit.className='al al-bad';
+      sit.innerHTML='<strong>2030년 중간 보고:</strong> 글로벌 감축 목표 달성률 47%에 그쳤습니다. 지구 평균 기온이 예상보다 <strong>빠르게 상승</strong>하고 있습니다. 협상단 내부에서 위기의식이 고조되고 있습니다.';
+      choicesEl.innerHTML=`
+        <button class="cbtn" onclick="s4chooseR3('A')">🔥 <strong>긴급 추가 감축 법안 제출</strong> — 목표 상향 조정, 즉각 실행</button>
+        <button class="cbtn" onclick="s4chooseR3('B')">💰 <strong>탄소세 도입 제안</strong> — 경제적 인센티브로 감축 유도</button>
+        <button class="cbtn" onclick="s4chooseR3('C')">⏳ <strong>현 목표 유지</strong> — 기술 개발을 기다림</button>`;
+    }
+  },2000);
+}
+
+function s4chooseR3(ch){
+  gs.s4.r3=ch;
+  const isGood=gs.s4.path==='good';
+  const msgs={
+    good:{A:'🚨 긴급 지원을 결정했습니다. 피해국들의 신뢰를 얻었습니다.',B:'🔬 기술 이전을 지원합니다. 장기적 해결책입니다.',C:'🤷 각국 자체 해결을 고수했습니다.'},
+    bad:{A:'🔥 긴급 법안을 제출했습니다. 강력한 의지를 보였습니다.',B:'💰 탄소세 도입을 제안했습니다.',C:'⏳ 현 목표를 유지했습니다. 위기는 계속됩니다.'}
+  };
+  const fb=document.getElementById('s4-r3-fb');
+  fb.className='fb info';
+  fb.textContent=isGood?msgs.good[ch]:msgs.bad[ch];
+  document.querySelectorAll('#s4-r3 .cbtn').forEach(b=>b.disabled=true);
+  event.currentTarget.classList.add('sel');
+  save();
+  setTimeout(()=>{
+    document.getElementById('s4-r3').style.display='none';
+    document.getElementById('s4-r4').style.display='block';
+    s4nationBar('s4-nation-bar4');
+    const eff=document.getElementById('s4-r3-effect');
+    eff.innerHTML=`<div class="bt">🦋 3라운드까지의 결과</div>${isGood?'국제 협력이 순조롭게 진행되었습니다. 마지막 최종 선언으로 수업을 마무리합니다.':'어려운 협상이었습니다. 최종 선언에서 강한 의지를 보여줄 수 있는 기회입니다.'}`;
+  },2000);
+}
+
+function s4chooseR4(ch){
+  gs.s4.r4=ch;
+  const isGood=gs.s4.path==='good';
+  const sc=(R1_SCORES[gs.s4.r1]||0)+(R2_SCORES[gs.s4.r2]||0)+((isGood?R3_SCORES_GOOD:R3_SCORES_BAD)[gs.s4.r3]||0)+(R4_SCORES[ch]||0);
+  gs.s4.score=sc;
+  const grade=sc>=90?'S':sc>=80?'A':sc>=70?'B':sc>=60?'C':'D';
+  gs.s4.grade=grade;
+  const bonus={S:15,A:10,B:5,C:0,D:0}[grade];
+  gs.bonus=bonus;
+  gs.scores.s4=Math.round(sc/5);
+  save();
+  document.querySelectorAll('#s4-r4 .cbtn').forEach(b=>b.disabled=true);
+  event.currentTarget.classList.add('sel');
+  setTimeout(()=>{
+    document.getElementById('s4-r4').style.display='none';
+    document.getElementById('s4-result').style.display='block';
+    const r3sc=(isGood?R3_SCORES_GOOD:R3_SCORES_BAD)[gs.s4.r3]||0;
+    document.getElementById('s4-gcircle').className=`gcircle g${grade}`;
+    document.getElementById('s4-gcircle').textContent=grade;
+    const titles={S:'🏆 기후 영웅! 완벽한 협상!',A:'⭐ 훌륭한 협상가!',B:'👍 균형 잡힌 협상',C:'💪 아쉬운 협상, 더 할 수 있어요',D:'📚 다음엔 더 잘할 수 있어요'};
+    const msgs2={S:'1.5°C 목표를 완벽하게 지켰습니다. 기후 정의와 감축 목표를 모두 달성했습니다!',A:'훌륭한 협상을 이끌었습니다. 조금만 더 과감했다면 S급이었을 거예요.',B:'균형 잡힌 협상이었습니다. 감축 목표나 기금 지원에서 더 적극적인 입장이 필요합니다.',C:'협상에 참여했지만 1.5°C 달성에는 부족했습니다. 기후 정의 관점을 더 고려해보세요.',D:'다음 협상에서는 감축 목표와 기후기금 모두 적극적으로 임해보세요!'};
+    document.getElementById('s4-grade-title').textContent=titles[grade];
+    document.getElementById('s4-grade-msg').textContent=msgs2[grade];
+    document.getElementById('s4-r1-pts').textContent=`${R1_SCORES[gs.s4.r1]||0}점`;
+    document.getElementById('s4-r2-pts').textContent=`${R2_SCORES[gs.s4.r2]||0}점`;
+    document.getElementById('s4-r3-pts').textContent=`${r3sc}점`;
+    document.getElementById('s4-r4-pts').textContent=`${R4_SCORES[gs.s4.r4]||0}점`;
+    document.getElementById('s4-total-pts').textContent=`${sc}점 (${grade}등급)`;
+    const bonusEl=document.getElementById('s4-bonus-info');
+    bonusEl.className='al '+(bonus>0?'al-ok':'al-info');
+    bonusEl.textContent=bonus>0?`🎮 기후 디펜스 게임에서 보너스 연구력 +${bonus}를 받습니다!`:'C등급 이하: 게임에서 보너스 연구력 없음. 더 열심히 하면 좋겠어요!';
+  },1000);
+}
+
+function completeS4(){
+  unlockNext('s4');
+  goHome();
+}
+
+/* ─── STAGE 5 ─────────────────────────── */
+const S5_CARBON_VALS=[2000,8000,14000,4000,6000,10000];
+
+function s5calcCarbon(){
+  let total=0;
+  for(let i=0;i<6;i++){if(document.getElementById('ci'+i).checked)total+=S5_CARBON_VALS[i];}
+  document.getElementById('s5-monthly').textContent=(total>=1000?(total/1000).toFixed(1)+'kg':total+'g');
+  document.getElementById('s5-10yr').textContent=((total*12*10)/1000).toFixed(1)+'kg';
+  if(total>0){
+    const monthly=total/1000;
+    document.getElementById('s5-func-msg').textContent=`10년 누적: y = ${monthly.toFixed(1)} × 12 × x (x=년수) → x=10일 때 ${(monthly*12*10).toFixed(1)}kg 감축`;
+  } else {
+    document.getElementById('s5-func-msg').textContent='';
+  }
+}
+
+function s5pledgeCheck(){
+  const txt=document.getElementById('s5-pledge').value.trim();
+  document.getElementById('s5-pledge-count').textContent=`${txt.length} / 10자 이상`;
+  document.getElementById('s5-submit-btn').disabled=txt.length<10;
+}
+
+function s5submit(){
+  gs.s5.pledge=document.getElementById('s5-pledge').value.trim();
+  gs.s5.done=true;
+  unlockNext('s5');
+  save();
+  const total=gs.scores.s1+gs.scores.s2+gs.scores.s3+Math.round(gs.scores.s4);
+  const grade=total>=90?'S':total>=80?'A':total>=70?'B':total>=60?'C':'D';
+  const titles={S:'🏆 환경 수학 마스터!',A:'⭐ 훌륭한 기후 시민!',B:'👍 노력하는 기후 시민',C:'💪 성장 중인 기후 시민',D:'📚 다음에는 더 잘할 수 있어요'};
+  document.getElementById('s5-gcircle').className=`gcircle g${grade}`;
+  document.getElementById('s5-gcircle').textContent=grade;
+  document.getElementById('s5-grade-title').textContent=titles[grade];
+  document.getElementById('s5-grade-msg').textContent=`${gs.name} 학생의 최종 점수는 ${total}점입니다.`;
+  document.getElementById('fin-s1').textContent=`${gs.scores.s1} / 30점`;
+  document.getElementById('fin-s2').textContent=`${gs.scores.s2} / 20점`;
+  document.getElementById('fin-s3').textContent=`${gs.scores.s3} / 30점`;
+  document.getElementById('fin-s4').textContent=`${Math.round(gs.scores.s4)} / 20점`;
+  document.getElementById('fin-total').textContent=`${total} / 100점 (${grade}등급)`;
+  const b=gs.bonus;
+  document.getElementById('s5-bonus-chip').textContent=b>0?`🎁 UN 협상 ${gs.s4.grade}등급 → 보너스 연구력 +${b} 획득!`:'보너스 없음 (C등급 이하)';
+  document.getElementById('s5-final').style.display='block';
+  document.getElementById('s5-submit-btn').disabled=true;
+  document.querySelector('#s5-final').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function launchGame(){
+  const name=encodeURIComponent(gs.name);
+  const cls=encodeURIComponent(`${gs.grade}-${gs.cls}`);
+  const bonus=gs.bonus||0;
+  window.open(`기후디펜스_프로토타입.html?name=${name}&class=${cls}&bonus=${bonus}`,'_blank');
+}
+
+/* ─── UTILS ─────────────────────────── */
+function toggleHint(id){
+  const el=document.getElementById(id);
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+
+/* ─── INIT ─────────────────────────── */
+window.onload=()=>{
+  if(gs.name){launchApp(gs.name==='선생님');}
+};
+</script>
+</body>
+</html>
