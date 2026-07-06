@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>1.5도를 지켜라! — 환경&수학 융합수업 2차시</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
 :root{--pr:#1565c0;--pr2:#0d47a1;--ac:#00897b;--rd:#c62828;--or:#e65100;--gn:#2e7d32;--bg:#EFF6FF;--wh:#fff;--tx:#1F2937;--mu:#4B5563}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -347,6 +349,22 @@ label{font-weight:600;font-size:.88rem;color:var(--mu)}
   <div class="admin-row">
     <span class="admin-label">기타</span>
     <button class="admin-btn" onclick="adminReset()" style="border-color:#f87171;color:#fca5a5">🔄 전체 초기화</button>
+  </div>
+  <div class="admin-divider"></div>
+  <div class="admin-row" style="flex-direction:column;align-items:stretch;gap:8px">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span class="admin-label">📊 학생 현황</span>
+      <select class="admin-q-select" id="dashGradeSelect">
+        <option value="">학년</option>
+        <option>1학년</option><option>2학년</option><option>3학년</option>
+      </select>
+      <select class="admin-q-select" id="dashClassSelect">
+        <option value="">반 선택</option>
+        <option>1반</option><option>2반</option><option>3반</option><option>4반</option><option>5반</option><option>6반</option><option>7반</option><option>8반</option><option>9반</option><option>10반</option><option>11반</option><option>12반</option><option>13반</option>
+      </select>
+      <button class="admin-btn" onclick="loadDashboard()">🔄 조회</button>
+    </div>
+    <div id="dashboardPanel" style="display:none;background:rgba(0,0,0,.3);border-radius:8px;padding:12px;max-height:400px;overflow-y:auto"></div>
   </div>
 </div>
 
@@ -973,7 +991,7 @@ function loadState(){
   try{const s=localStorage.getItem(SAVE_KEY);if(s)return JSON.parse(s);}catch(e){}
   return defaultState();
 }
-function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(gs));}catch(e){}}
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(gs));}catch(e){}syncProgress();}
 
 function showScr(id){
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
@@ -2104,6 +2122,98 @@ function toggleHint(id){
   const el=document.getElementById(id);
   if(el.style.display==='block'){el.style.display='none';}
   else{requestHint(()=>{el.style.display='block';});}
+}
+
+/* ── Firebase ── */
+let _db=null,_syncTimer=null;
+try{
+  firebase.initializeApp({
+    apiKey:"AIzaSyAEFxLqfhcl6RJlS3ju9InTx9AbFHQ_Yfg",
+    authDomain:"climate-lesson.firebaseapp.com",
+    projectId:"climate-lesson",
+    storageBucket:"climate-lesson.firebasestorage.app",
+    messagingSenderId:"699342489530",
+    appId:"1:699342489530:web:f1efb39829c9b39ea8ff83"
+  });
+  _db=firebase.firestore();
+}catch(e){console.warn('Firebase init:',e);}
+
+function syncProgress(){
+  if(!_db||!gs.name||gs.name==='선생님')return;
+  clearTimeout(_syncTimer);
+  _syncTimer=setTimeout(()=>{
+    const today=new Date().toISOString().slice(0,10);
+    const docId=`${today}_${gs.cls}_${String(gs.num).padStart(2,'0')}`;
+    const total=Math.max(0,gs.scores.s1+gs.scores.s2+gs.scores.s3+Math.round(gs.scores.s4)-(gs.hintPenalty||0));
+    _db.collection('progress2').doc(docId).set({
+      date:today,
+      grade:gs.grade,
+      cls:gs.cls,
+      num:parseInt(gs.num),
+      name:gs.name,
+      s1done:gs.done.s1||false,
+      s2done:gs.done.s2||false,
+      s3done:gs.done.s3||false,
+      s4done:gs.done.s4||false,
+      s5done:gs.done.s5||false,
+      scoreS1:gs.scores.s1||0,
+      scoreS2:gs.scores.s2||0,
+      scoreS3:gs.scores.s3||0,
+      scoreS4:Math.round(gs.scores.s4)||0,
+      hintPenalty:gs.hintPenalty||0,
+      totalScore:total,
+      lastUpdated:firebase.firestore.FieldValue.serverTimestamp()
+    },{merge:true}).catch(e=>console.warn('sync:',e));
+  },1500);
+}
+
+/* ── 교사 대시보드 ── */
+async function loadDashboard(){
+  if(!_db){alert('Firebase에 연결되지 않았어요.');return;}
+  const grade=document.getElementById('dashGradeSelect').value;
+  const cls=document.getElementById('dashClassSelect').value;
+  if(!grade||!cls){alert('학년과 반을 모두 선택하세요!');return;}
+  const panel=document.getElementById('dashboardPanel');
+  panel.style.display='block';
+  panel.innerHTML='<div style="color:#a5b4fc;font-size:12px">불러오는 중...</div>';
+  try{
+    const today=new Date().toISOString().slice(0,10);
+    const snap=await _db.collection('progress2')
+      .where('grade','==',grade)
+      .where('cls','==',cls)
+      .where('date','==',today)
+      .get();
+    if(snap.empty){
+      panel.innerHTML='<div style="color:#a5b4fc;font-size:12px">오늘 접속한 학생이 없어요.</div>';
+      return;
+    }
+    const students=[];
+    snap.forEach(d=>students.push(d.data()));
+    students.sort((a,b)=>a.num-b.num);
+    const stageLabel=s=>{
+      if(s.s5done)return '<span style="color:#4ade80">✅ 완료</span>';
+      const stages=['s1done','s2done','s3done','s4done'];
+      const names=['1단계','2단계','3단계','4단계'];
+      const dots=stages.map((k,i)=>`<span style="color:${s[k]?'#4ade80':'#f87171'};font-size:10px">${s[k]?'●':'○'}</span>`).join('');
+      const cur=stages.findIndex(k=>!s[k]);
+      return `<span style="color:#fbbf24">${names[cur>=0?cur:3]} 진행 ${dots}</span>`;
+    };
+    const completed=students.filter(s=>s.s5done).length;
+    const rows=students.map(s=>`<tr style="border-bottom:1px solid rgba(255,255,255,.06)">
+      <td style="padding:5px 8px;color:#c7d2fe;width:32px">${String(s.num).padStart(2,'0')}</td>
+      <td style="padding:5px 8px;color:#e0e7ff;width:72px">${s.name}</td>
+      <td style="padding:5px 8px;font-size:11px">${stageLabel(s)}</td>
+      <td style="padding:5px 8px;color:#fbbf24;font-size:11px;text-align:right">${s.totalScore}점</td>
+    </tr>`).join('');
+    panel.innerHTML=`
+      <div style="color:#a5b4fc;font-size:11px;margin-bottom:8px">
+        ${grade} ${cls} · 접속 <b style="color:#e0e7ff">${students.length}명</b> · 완료 <b style="color:#4ade80">${completed}명</b>
+        <span style="float:right;cursor:pointer;color:#6b7280" onclick="loadDashboard()">↻ 새로고침</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>${rows}</tbody></table>`;
+  }catch(e){
+    panel.innerHTML=`<div style="color:#f87171;font-size:12px">오류: ${e.message}</div>`;
+  }
 }
 
 /* ─── INIT ─────────────────────────── */
