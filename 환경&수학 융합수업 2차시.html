@@ -2048,7 +2048,7 @@ function s5submit(){
   const _name=encodeURIComponent(gs.name);
   const _cls=encodeURIComponent(`${gs.grade}-${gs.cls}`);
   const _bonus=gs.bonus||0;
-  document.getElementById('game-link').href=`climate-defense.html?name=${_name}&class=${_cls}&bonus=${_bonus}`;
+  document.getElementById('game-link').href=`activity-simulation.html?name=${_name}&class=${_cls}&bonus=${_bonus}`;
   document.getElementById('s5-final').style.display='block';
   document.getElementById('s5-submit-btn').disabled=true;
   document.querySelector('#s5-final').scrollIntoView({behavior:'smooth',block:'start'});
@@ -2059,7 +2059,7 @@ function launchGame(){
   const cls=encodeURIComponent(`${gs.grade}-${gs.cls}`);
   const bonus=gs.bonus||0;
   const a=document.createElement('a');
-  a.href=`climate-defense.html?name=${name}&class=${cls}&bonus=${bonus}`;
+  a.href=`activity-simulation.html?name=${name}&class=${cls}&bonus=${bonus}`;
   a.target='_blank';a.rel='noopener';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
