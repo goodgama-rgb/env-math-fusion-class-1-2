@@ -281,6 +281,51 @@ body{font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;background:#EFF
 
 .sim-math-card{background:#fff;border:1.5px solid var(--blue-l);border-radius:var(--r);padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
 .sim-math-q{font-size:14px;font-weight:600;margin-bottom:10px;color:var(--gray-800)}
+
+/* ── 개념 팝업 ── */
+.concept-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeInOverlay .3s ease}
+@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
+.concept-box{background:#fff;border-radius:16px;width:100%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden;animation:slideUpBox .35s ease}
+@keyframes slideUpBox{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.concept-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--blue);color:#fff}
+.concept-header-title{font-size:13px;font-weight:700;letter-spacing:.03em;opacity:.95}
+.concept-close-btn{background:rgba(255,255,255,.2);border:none;color:#fff;font-size:13px;cursor:pointer;padding:4px 10px;border-radius:6px;font-family:inherit;font-weight:700;transition:background .15s}
+.concept-close-btn:hover{background:rgba(255,255,255,.35)}
+.concept-slide{padding:24px 24px 16px;display:none}
+.concept-slide.active{display:block}
+.concept-slide-icon{font-size:42px;text-align:center;margin-bottom:10px;line-height:1}
+.concept-slide-title{font-size:18px;font-weight:700;text-align:center;color:var(--gray-800);margin-bottom:14px}
+.concept-body{font-size:14px;line-height:1.75;color:var(--gray-600)}
+.concept-body p{margin-bottom:10px}
+.concept-formula{background:var(--blue-ll);border:1.5px solid var(--blue-l);border-radius:8px;padding:12px 16px;text-align:center;font-size:15px;font-weight:700;color:var(--blue);margin:12px 0;letter-spacing:.02em}
+.concept-infobox{background:var(--yellow-l);border-left:3px solid #ca8a04;border-radius:0 6px 6px 0;padding:10px 13px;font-size:13px;margin-top:12px;line-height:1.65;color:var(--gray-800)}
+.concept-example{background:var(--green-ll);border:1px solid var(--green-l);border-radius:8px;padding:10px 14px;font-size:13px;margin-top:10px;color:var(--green);line-height:1.6}
+.concept-yaxis{display:flex;flex-direction:column;gap:6px;margin:14px 0}
+.concept-yrow{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;line-height:1.4}
+.concept-yrow.hot{background:#fef2f2;border:1px solid #fca5a5}
+.concept-yrow.warm{background:#fff7ed;border:1px solid #fdba74}
+.concept-yrow.zero-row{background:var(--gray-100);border:1px solid var(--gray-200)}
+.concept-yrow.cool{background:#eff6ff;border:1px solid #bfdbfe}
+.concept-yval{font-weight:700;min-width:60px;font-size:14px;flex-shrink:0}
+.concept-yrow.hot .concept-yval{color:#dc2626}
+.concept-yrow.warm .concept-yval{color:#ea580c}
+.concept-yrow.zero-row .concept-yval{color:var(--gray-600)}
+.concept-yrow.cool .concept-yval{color:var(--blue)}
+.concept-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.concept-stat{background:var(--gray-100);border-radius:10px;padding:16px 12px;text-align:center;border:2px solid var(--gray-200)}
+.concept-stat.danger{background:#fff1f2;border-color:#fca5a5}
+.concept-stat-num{font-size:26px;font-weight:700;margin-bottom:6px;color:var(--orange)}
+.concept-stat.danger .concept-stat-num{color:#dc2626}
+.concept-stat-label{font-size:12px;color:var(--gray-600);line-height:1.5}
+.concept-footer{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--gray-200);background:var(--gray-50)}
+.concept-progress{display:flex;gap:6px;align-items:center}
+.concept-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-200);transition:all .25s;cursor:pointer}
+.concept-dot.active{background:var(--blue);transform:scale(1.3)}
+.concept-dot.done{background:var(--green-m)}
+.concept-next-btn{background:var(--blue);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.concept-next-btn:hover{background:var(--blue-d)}
+.concept-next-btn.final{background:var(--green-m)}
+.concept-next-btn.final:hover{background:#15803d}
 </style>
 </head>
 <body>
@@ -868,14 +913,14 @@ body{font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;background:#EFF
     <div class="quiz-sub">가로축은 시간 구간, 세로축은 ?</div>
     <div class="choices single" id="chR_1">
       <button class="choice-btn" onclick="choiceAnswer('R_1',0)">① 각 구간의 평균 기온 편차 (°C)</button>
-      <button class="choice-btn" onclick="choiceAnswer('R_1',1)">② 기온이 10년마다 얼마나 변했는지 (°C / 10년)</button>
+      <button class="choice-btn" onclick="choiceAnswer('R_1',1)">② 10년 동안 기온이 평균 몇 °C 변했는지 (°C / 10년)</button>
       <button class="choice-btn" onclick="choiceAnswer('R_1',2)">③ 각 구간의 최고 기온 (°C)</button>
       <button class="choice-btn" onclick="choiceAnswer('R_1',3)">④ 전 세계 이산화탄소 배출량</button>
     </div>
     <div class="attempts" id="attR_1"></div>
     <div class="fb fb-wrong" id="fwR_1"><div class="fb-label">다시 생각해봐요</div>그래프 제목과 y축 단위를 다시 살펴봐요. "°C / 10년"이 힌트예요!</div>
     <div class="fb fb-hint" id="fhR_1"><div class="fb-label">힌트</div>단계 2에서 배운 "평균 기온 편차"와 달리, 이번엔 <span class="em">변화의 속도</span>를 보는 거예요!</div>
-    <div class="fb fb-correct" id="fcR_1"><div class="fb-label">정답!</div>맞아요! 이 그래프는 "기온이 10년마다 얼마나 빠르게 올랐는지"를 나타내요. 막대가 높을수록 <span class="em">기온이 더 빠르게 오른 구간</span>이에요.</div>
+    <div class="fb fb-correct" id="fcR_1"><div class="fb-label">정답!</div>맞아요! 이 그래프는 "10년 동안 기온이 평균 몇 °C 변했는지"를 나타내요. 막대가 높을수록 <span class="em">기온이 더 빠르게 오른 구간</span>이에요.</div>
     <div><button class="retry-btn" id="rbR_1" onclick="retry('R_1')">다시 도전</button><button class="next-btn" id="nbR_1" onclick="nextQuiz('R_1','R_2')">다음 →</button></div>
   </div>
 
@@ -1228,7 +1273,7 @@ body{font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;background:#EFF
 
     <div class="nav-row">
       <button class="btn-nav btn-secondary" onclick="goStage(2)">← 이전 단계</button>
-      <button class="btn-nav btn-primary" onclick="finishStage(3)">다음 단계 →</button>
+      <button class="btn-nav btn-primary" onclick="tryFinishStage4()">다음 단계 →</button>
     </div>
   </div>
 </div>
@@ -1702,10 +1747,10 @@ function flipMyCard(){
 
 /* ── 초성 퀴즈 ── */
 const chosungAnswers={
-  1:{answers:['해수면'],hint:'바다의 높이예요! "해수면"'},
-  2:{answers:['여름'],hint:'가장 더운 계절이에요! "여름"'},
-  3:{answers:['인간','사람','인류'],hint:'바로 우리예요! "인간"'},
-  4:{answers:['식량부족','식량 부족'],hint:'"식량 부족" — 먹을 것이 모자란 상태예요!'},
+  1:{answers:['해수면'],hint:'빙하가 녹으면 이게 높아져서 섬나라들이 잠겨버려요!'},
+  2:{answers:['여름'],hint:'에어컨이 가장 필요한 계절이에요!'},
+  3:{answers:['인간','사람','인류'],hint:'이 수업을 듣고 있는 바로 그 생물이에요!'},
+  4:{answers:['식량부족','식량 부족'],hint:'농작물이 망가지면 밥상에 무슨 일이 생길까요?'},
 };
 const chosungDone={1:false,2:false,3:false,4:false};
 
@@ -1937,7 +1982,7 @@ function setView(v,el){document.querySelectorAll('.chart-tab').forEach(t=>t.clas
 
 function avg(s,e){const d=raw.filter(r=>r.y>=s&&r.y<=e);return d.reduce((a,b)=>a+b.v,0)/d.length;}
 function buildAvgChart(){
-  const avgs=periods.map(p=>avg(p.s,p.e));
+  const avgs=[-0.31,-0.18,0.09,0.59];
   const nums=document.getElementById('avgNums');
   nums.innerHTML=periods.map((p,i)=>`<div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:10px 12px"><div style="font-size:11px;color:#9CA3AF">${p.label.replace('\n',' ')}</div><div style="font-size:20px;font-weight:700;color:${avgs[i]>0?'#D85A30':'#2563EB'}">${avgs[i].toFixed(2)}°C</div></div>`).join('');
   new Chart(document.getElementById('avgChart'),{
@@ -1954,6 +1999,46 @@ function buildRateChart(){
     data:{labels:rateSegs.map(d=>d.label),datasets:[{label:'변화율(°C/10년)',data:rates,backgroundColor:rates.map(r=>Math.abs(r-maxR)<0.001?'#D85A30':'#2563EB'),borderRadius:6}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{ticks:{color:'#6B7280',font:{size:11}},grid:{display:false}},y:{ticks:{color:'#6B7280',font:{size:11},callback:v=>`${v.toFixed(2)}`},title:{display:true,text:'°C / 10년',color:'#9CA3AF',font:{size:11}}}}}
   });
+}
+
+/* ── 4단계 완료 검증 ── */
+function tryFinishStage4(){
+  function fail(msg,id){
+    alert(msg);
+    const el=document.getElementById(id);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.focus();}
+    return true;
+  }
+  const v=id=>(document.getElementById(id)||{}).value||'';
+
+  if(v('r1').trim().length<10)
+    return fail('Q14 답변을 작성해주세요! (10자 이상)','r1');
+  if(v('r2').trim().length<10)
+    return fail('Q15 답변을 작성해주세요! (10자 이상)','r2');
+  if(state.selectedTopic<0){
+    alert('탐구 주제를 선택해주세요!');
+    document.querySelector('.topic-grid').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  const td=topicData[state.selectedTopic];
+  for(const q of td.qs){
+    if(v(q.id).trim().length<10)
+      return fail(`심화 탐구 질문에 답변을 작성해주세요! (10자 이상)`,q.id);
+  }
+  if(q18Selected<0){
+    alert('Q18에서 실천 항목을 선택하고 계산을 완료해주세요!');
+    document.getElementById('q18card').scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+  if(!q18step4done){
+    alert('Q18 계산을 모두 완료해주세요! (STEP 2~4까지 풀어야 해요)');
+    document.getElementById('q18card').scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+  if(v('r5').trim().length<10)
+    return fail('오늘의 마무리 한 문장을 작성해주세요! (10자 이상)','r5');
+
+  finishStage(3);
 }
 
 /* ── 주제 선택 ── */
@@ -2138,6 +2223,7 @@ function launchApp(admin){
   loadProgress();
   updateDots(0);
   buildTempChart('all');
+  if(!admin)showConceptModal();
 }
 
 /* ── 관리자 패널 ── */
@@ -3775,7 +3861,119 @@ function makeRain(){
     setTimeout(()=>el.remove(),4000);
   }
 }
+
+/* ── 개념 팝업 JS ── */
+let conceptSlide=0;
+const CONCEPT_TOTAL=3;
+function showConceptModal(){
+  const m=document.getElementById('conceptModal');
+  if(!m)return;
+  conceptSlide=0;
+  m.style.display='flex';
+  renderConceptSlide();
+}
+function closeConceptModal(){
+  const m=document.getElementById('conceptModal');
+  if(m)m.style.display='none';
+}
+function conceptNext(){
+  if(conceptSlide<CONCEPT_TOTAL-1){conceptSlide++;renderConceptSlide();}
+  else{closeConceptModal();}
+}
+function renderConceptSlide(){
+  document.querySelectorAll('.concept-slide').forEach((el,i)=>el.classList.toggle('active',i===conceptSlide));
+  document.querySelectorAll('.concept-dot').forEach((el,i)=>{
+    el.classList.toggle('active',i===conceptSlide);
+    el.classList.toggle('done',i<conceptSlide);
+  });
+  const btn=document.getElementById('conceptNextBtn');
+  if(!btn)return;
+  if(conceptSlide===CONCEPT_TOTAL-1){btn.textContent='그래프 탐구 시작! 🚀';btn.className='concept-next-btn final';}
+  else{btn.textContent='다음 →';btn.className='concept-next-btn';}
+}
+function conceptGoto(n){conceptSlide=n;renderConceptSlide();}
 </script>
+
+<!-- ══ 개념 팝업 모달 ══ -->
+<div id="conceptModal" class="concept-overlay" style="display:none">
+  <div class="concept-box">
+    <div class="concept-header">
+      <span class="concept-header-title">📚 그래프 읽기 전, 핵심 개념 3가지</span>
+      <button class="concept-close-btn" onclick="closeConceptModal()">건너뛰기 ✕</button>
+    </div>
+
+    <!-- 슬라이드 1: 기온 편차란? -->
+    <div class="concept-slide active">
+      <div class="concept-slide-icon">🌡️</div>
+      <div class="concept-slide-title">기온 편차란?</div>
+      <div class="concept-body">
+        <p>기온 편차는 <strong>특정 해의 기온</strong>이 <strong>기준 기온</strong>보다 얼마나 높거나 낮은지를 나타내는 수치예요.</p>
+        <div class="concept-formula">기온 편차 = 그 해의 기온 − 기준 기온</div>
+        <div class="concept-infobox">📌 이 그래프의 <strong>기준 기온</strong>은 <strong>1850~1900년의 평균 기온</strong>이에요.<br>산업화가 본격 시작되기 전의 기온을 기준(0으로) 삼아요.</div>
+        <div class="concept-example">💡 예시: 2023년의 기온이 기준보다 1.17°C 높다<br>→ 기온 편차 = <strong>+1.17°C</strong></div>
+      </div>
+    </div>
+
+    <!-- 슬라이드 2: y축 읽기 -->
+    <div class="concept-slide">
+      <div class="concept-slide-icon">📊</div>
+      <div class="concept-slide-title">세로축(y축) 읽기</div>
+      <div class="concept-body">
+        <p>그래프의 세로축이 헷갈렸다면, 이렇게 읽으면 돼요!</p>
+        <div class="concept-yaxis">
+          <div class="concept-yrow hot">
+            <span class="concept-yval">+1.5°C</span>
+            <span>기준보다 훨씬 더 뜨거운 해 🔥</span>
+          </div>
+          <div class="concept-yrow warm">
+            <span class="concept-yval">+0.5°C</span>
+            <span>기준보다 조금 더 따뜻한 해 ☀️</span>
+          </div>
+          <div class="concept-yrow zero-row">
+            <span class="concept-yval">0°C</span>
+            <span>기준 기온과 같은 해 (1850~1900년 평균)</span>
+          </div>
+          <div class="concept-yrow cool">
+            <span class="concept-yval">−0.3°C</span>
+            <span>기준보다 조금 더 서늘한 해 ❄️</span>
+          </div>
+        </div>
+        <div class="concept-infobox">⚠️ 주의! 여기서 <strong>0°C는 얼음이 어는 온도가 아니에요!</strong><br>단지 기준점을 0으로 설정한 것뿐이에요.</div>
+      </div>
+    </div>
+
+    <!-- 슬라이드 3: 왜 중요할까? -->
+    <div class="concept-slide">
+      <div class="concept-slide-icon">⚠️</div>
+      <div class="concept-slide-title">왜 이게 중요할까요?</div>
+      <div class="concept-body">
+        <div class="concept-stats">
+          <div class="concept-stat">
+            <div class="concept-stat-num">+1.17°C</div>
+            <div class="concept-stat-label">2023년<br>기온 편차</div>
+          </div>
+          <div class="concept-stat danger">
+            <div class="concept-stat-num">+1.5°C</div>
+            <div class="concept-stat-label">과학자들이<br>경고하는 임계점</div>
+          </div>
+        </div>
+        <p>현재 지구는 산업화 이전보다 약 <strong>1.17°C</strong> 따뜻해졌어요. 과학자들은 <strong>+1.5°C</strong>를 넘으면 해수면 상승, 극단적 기상 현상 등이 걷잡을 수 없게 된다고 경고해요.</p>
+        <div class="concept-infobox">🌍 이제 그래프를 직접 탐구하며 지구 기온 변화의 패턴을 수학적으로 분석해봐요!</div>
+      </div>
+    </div>
+
+    <!-- 푸터 내비게이션 -->
+    <div class="concept-footer">
+      <div class="concept-progress">
+        <span class="concept-dot active" onclick="conceptGoto(0)"></span>
+        <span class="concept-dot" onclick="conceptGoto(1)"></span>
+        <span class="concept-dot" onclick="conceptGoto(2)"></span>
+      </div>
+      <button class="concept-next-btn" id="conceptNextBtn" onclick="conceptNext()">다음 →</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- /mainContent -->
 </body>
 </html>
